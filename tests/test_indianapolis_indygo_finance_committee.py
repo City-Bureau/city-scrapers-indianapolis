@@ -52,7 +52,7 @@ def test_start():
 def test_time_notes():
     assert (
         parsed_items[0]["time_notes"]
-        == "Board meetings are set for 8:30AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
+        == "Finance Committee meetings are set for 8:30AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
     )
 
 
