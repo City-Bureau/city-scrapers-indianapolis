@@ -67,7 +67,7 @@ class IndianapolisIndygoFinanceCommitteeSpider(CityScrapersSpider):
 
     def _parse_time_notes(self, item):
         """Parse any additional notes on the timing of the meeting"""
-        return "Board meetings are set for 8:30AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
+        return "Finance Committee meetings are set for 8:30AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
 
     def _parse_all_day(self, item):
         """Parse or generate all-day status. Defaults to False."""
