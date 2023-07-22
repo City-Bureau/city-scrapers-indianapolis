@@ -42,7 +42,7 @@ def test_description():
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2023, 1, 19, 8, 0)
+    assert parsed_items[0]["start"] == datetime(2023, 1, 19, 8, 30)
 
 
 # def test_end():
@@ -59,7 +59,7 @@ def test_time_notes():
 def test_id():
     assert (
         parsed_items[0]["id"]
-        == "indianapolis_indygo_finance_committee/202301191700/x/indygo_finance_committee"  # noqa
+        == "indianapolis_indygo_finance_committee/202301190830/x/indygo_finance_committee"  # noqa
     )
 
 
