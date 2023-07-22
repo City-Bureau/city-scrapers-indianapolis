@@ -58,7 +58,7 @@ class IndianapolisIndygoFinanceCommitteeSpider(CityScrapersSpider):
         """Parse start datetime as a naive datetime object."""
         string = item.css("::text").get()
         start_date = string.split(" ")[1] + " " + string.split(" ")[2] + " 2023"
-        start_time = "08:30:00"
+        start_time = "17:00:00"
         return parser().parse(start_date + " " + start_time)
 
     def _parse_end(self, item):
@@ -67,7 +67,7 @@ class IndianapolisIndygoFinanceCommitteeSpider(CityScrapersSpider):
 
     def _parse_time_notes(self, item):
         """Parse any additional notes on the timing of the meeting"""
-        return "Finance Committee meetings are set for 8:30AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
+        return "Board meetings are set for 8:30AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
 
     def _parse_all_day(self, item):
         """Parse or generate all-day status. Defaults to False."""
@@ -86,7 +86,11 @@ class IndianapolisIndygoFinanceCommitteeSpider(CityScrapersSpider):
             {
                 "href": "https://www.indygo.net/about-indygo/board-of-directors/",
                 "title": "Meeting Page",
-            }
+            },
+            {
+                "href": "https://public.onboardmeetings.com/Group/HrdLpC4rmFdYrgplGJZm82TtkS14OCvw7QLcFFPpPrIA/PBtWHdxtJt6XgVphYPHNTSsJFC992FZbLhKOoPeFrjsA",  # noqa
+                "title": "Past Finance Committee packets",
+            },
         ]
 
     def _parse_source(self, response):
