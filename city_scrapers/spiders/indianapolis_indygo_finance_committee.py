@@ -58,7 +58,7 @@ class IndianapolisIndygoFinanceCommitteeSpider(CityScrapersSpider):
         """Parse start datetime as a naive datetime object."""
         string = item.css("::text").get()
         start_date = string.split(" ")[1] + " " + string.split(" ")[2] + " 2023"
-        start_time = "17:00:00"
+        start_time = "08:30:00"
         return parser().parse(start_date + " " + start_time)
 
     def _parse_end(self, item):
