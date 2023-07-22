@@ -86,7 +86,11 @@ def test_links():
         {
             "href": "https://www.indygo.net/about-indygo/board-of-directors/",
             "title": "Meeting Page",
-        }
+        },
+        {
+            "href": "https://public.onboardmeetings.com/Group/HrdLpC4rmFdYrgplGJZm82TtkS14OCvw7QLcFFPpPrIA/DlKdtulEaT4W%2Ff8DW40PxbNtxqyNp0cvwZNmbbcilaQA",  # noqa
+            "title": "Past Service Committee packets",
+        },
     ]
 
 
