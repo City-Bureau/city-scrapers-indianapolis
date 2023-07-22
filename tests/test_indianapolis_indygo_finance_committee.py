@@ -42,7 +42,7 @@ def test_description():
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2023, 1, 19, 8, 30)
+    assert parsed_items[0]["start"] == datetime(2023, 1, 19, 17, 0)
 
 
 # def test_end():
@@ -52,14 +52,14 @@ def test_start():
 def test_time_notes():
     assert (
         parsed_items[0]["time_notes"]
-        == "Finance Committee meetings are set for 8:30AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
+        == "Board meetings are set for 8:30AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
     )
 
 
 def test_id():
     assert (
         parsed_items[0]["id"]
-        == "indianapolis_indygo_finance_committee/202301190830/x/indygo_finance_committee"  # noqa
+        == "indianapolis_indygo_finance_committee/202301191700/x/indygo_finance_committee"  # noqa
     )
 
 
@@ -86,7 +86,11 @@ def test_links():
         {
             "href": "https://www.indygo.net/about-indygo/board-of-directors/",
             "title": "Meeting Page",
-        }
+        },
+        {
+            "href": "https://public.onboardmeetings.com/Group/HrdLpC4rmFdYrgplGJZm82TtkS14OCvw7QLcFFPpPrIA/PBtWHdxtJt6XgVphYPHNTSsJFC992FZbLhKOoPeFrjsA",  # noqa
+            "title": "Past Finance Committee packets",
+        },
     ]
 
 
