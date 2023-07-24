@@ -1,0 +1,1202 @@
+<!doctype html>
+<html lang="en">
+<head>
+        <script src="https://www.datadoghq-browser-agent.com/datadog-rum.js" integrity="sha384-frvU0I0BBij9JPfMa8WravYkr2rq3+/cYDQ2JiTyOwM94otPBqckHqDbLMxjFlFq" crossorigin="anonymous" type="text/javascript"></script>
+        <script>
+            window.DD_RUM && window.DD_RUM.init({
+                clientToken: 'pub7f11f2dac3cf6bd13861448869a7a692',
+                applicationId: '3bd930da-5814-45ce-9c67-984ae6fcc9e5',
+                site: 'datadoghq.com',
+                datacenter: 'us',
+                service: 'ui.public',
+                env: 'pd',
+                sampleRate: 10
+            });
+        </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE" /><title>
+	The Consolidated City of Indianapolis/Marion County - Calendar
+</title><link href="/Fonts/material-icons/iconfont/material-icons.css" rel="stylesheet" /><link href="/Fonts/material-icons/css/material-icons.css" rel="stylesheet" /><link href="/Fonts/FontAwesome/font-awesome.css" type="text/css" rel="stylesheet" /><link rel="stylesheet" href="/Fonts/FontAwesome/font-awesome-5.1.1/css/all.css" /><link rel="stylesheet" href="/Fonts/FontAwesome/font-awesome-5.1.1/css/v4-shims.css" /><link rel="icon" type="image/x-icon" href="/images/BrightlyPNG.png" />
+
+    <script type="text/javascript" src="/scripts/vendor/jQuery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/scripts/vendor/moment.min.js"></script>
+    <script type="text/javascript" src="/scripts/vendor/modernizr-2.6.2.js"></script>
+    <script type="text/javascript" src="/scripts/core.js?v=2021.1.0"></script>
+    <script type="text/javascript" src="/scripts/widgetsupport.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script type="text/javascript">
+        $(window).resize(function () { if ($("#gadget").css('display') != 'none') { ActiveData.Gadgets.Resized(); } });
+        $(function () { $("input:password").each(function () { $(this).attr('autocomplete', 'off'); }); });
+    </script>
+
+    <!-- jQuery Datepicker -->
+    <link href="/scripts/vendor/jquery/ui/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet" /><script type="text/javascript">ActiveData.Variables = {"site":{"route":"","name":"The Consolidated City of Indianapolis/Marion County","layoutDirectory":"/layouts/Community/Default Site/Active Data Default","private":false,"culture":"en-US","useColorCoding":true,"googleApiKey":"","mapboxApiKey":""},"tenant":{"route":"","name":"The Consolidated City of Indianapolis/Marion County"},"runtime":{"baseUrl":"https://calendar.indy.gov","listUrl":"https://calendar.indy.gov/","adminUrl":"https://calendar.indy.gov/admin/default.aspx","isDetails":false,"isList":true,"isGadget":false,"view":"grid.xslt"},"user":{"isLoggedIn":false},"filter":{"startRange":"7/1/2023 12:00:00 AM","endRange":"7/31/2023 12:00:00 AM","keywords":"","categories":[],"locations":[]},"layout":{"sitelogo":"https://calendarmedia.blob.core.windows.net/assets/240838f7-60ef-44e8-842f-76e0011564e6.png","sitelogourl":"https://www.indy.gov","tagline":"","css":"\u003cstyle type=\u0027text/css\u0027\u003e\r\n/* primary font color no background */\r\n#search_range,\r\n#sidebar h3,\r\n#view-search a.here,\r\n#view-search #search-link,\r\n#view-search span,\r\n#view-search h3,\r\n.adx-modal h2,\r\n.date,\r\n.list-event-locale a,\r\n.list-event-preview h3 a,\r\n.quick-link-container ul li a,\r\n#theme-event-detail-view #event-details-main-content h2,\r\n.accordion-header,\r\nth,\r\na#back-to-events,\r\nfooter a, \r\n.core-title,\r\n#search_results \u003e div \u003e h2,\r\ndiv.event-pagination \u003e ul \u003e li \u003e a, div.event-pagination \u003e ul \u003e li \u003e a:visited, div.event-pagination \u003e ul \u003e li \u003e a:focus,\r\na:any-link,\r\n.core-inline-products-action a,\r\n.event-detail-contact-person a,\r\n.full-schedule-container h3 a,\r\n.accordion-content \u003e div,\r\n.ep-popuptext \u003e div {\r\n    color: #14284B !important;\r\n}\r\n\r\na:-webkit-any-link {\r\n    color: #14284B !important;\r\n}\r\n\r\n/* secondary font color no background */\r\n#view-search a,\r\n#event-favorite-container #event-favorite,\r\n.list-event-date,\r\n.list-event-locale, .list-event-locale p a[itemprop=\"url\"] span, .list-event-locale p,\r\n.list-event-preview p,\r\n.list-event-preview,\r\n.event-detail-date p,\r\n.event-detail-contact-person p,\r\n#event-detail-copy,\r\n.results-none p,\r\nfooter p,\r\n.custom-field-label,\r\n.event-attachments,\r\n.core-inline-products tbody td,\r\n.accordion-content \u003e div.event-attachments,\r\n.accordion-content \u003e div.event-keywords,\r\n.share-it-accordion-content h4,\r\n#search-link em,\r\n#month tbody .next .date, \r\n#month tbody .previous .date ,\r\n.list2 .list-event:nth-of-type(even) .list-event-preview h4 a,\r\n.list2 .list-event:nth-of-type(even) .quick-link-container ul li a,\r\n.list2 .list-event:nth-of-type(even) .list-event-preview p {\r\n    color: #14284B !important;\r\n}\r\n\r\n/* background */\r\nbody {\r\n    background: #FFFFFF !important;\r\n    background-repeat: unset !important;\r\n    background-position: unset !important;\r\n    background-attachment: fixed !important;\r\n    background-size: initial !important;\r\n}\r\n\r\n/* no background */\r\n.wrap {\r\n    background-color: #FFFFFF !important;\r\n    padding-left: 15px;\r\n    padding-right: 15px;\r\n    padding-top: 10px;\r\n}\r\n\r\nnav#main {\r\n    padding-left: 30px;\r\n    padding-right: 15px;\r\n}\r\n\r\nnav#main,\r\nimg#publicBody_imgLogoImage {\r\n    margin-left: -15px;\r\n    margin-top: -10px;\r\n}\r\n\r\n/*primary background color + primary font color */\r\n.list2 #main-content h3,\r\n.list2 #main-content h3 a,\r\n#core_registration .core-button-submit,\r\n#calendar-month,\r\n.list-event-link a,\r\n.wrapper-dropdown.active,\r\n.core-button-submit,\r\ndiv.event-pagination \u003e ul \u003e li \u003e span, div.event-pagination \u003e ul \u003e li \u003e a:hover,\r\n.ep-popup .ep-adx-primary-action a,\r\n#core_signin .core-button-container .core-button-submit,\r\n#core_signup .core-button-container .core-button-submit,\r\n#core_search .core-button-container .core-button-submit,\r\n#core_search .core-button-container .core-button-clear,\r\n#core_guest_registration a, #core_profile_registration a,\r\n#core_order_confirmation .core-button-submit,\r\n#top-main .wrap,\r\n#mobile-nav-link i {\r\n    background-color: #14284B !important;\r\n    color: #FFFFFF !important;\r\n}\r\n\r\n/* Navigation Bar */\r\n.ep-nav {\r\n    background-color: #FFFFFF !important;\r\n}\r\n.ep-nav .navitem {\r\n    background-color: #FFFFFF !important;\r\n    color: #0F2E46 !important;\r\n}\r\n.ep-nav .navitem-highlight {\r\n    background-color: #4D4D4D !important;\r\n    color: #FFFFFF !important;\r\n}\r\n.ep-nav .navitem:hover {\r\n    background-color: #4D4D4D !important;\r\n    color: #FFFFFF !important;\r\n}\r\n.ep-nav .navmenu {\r\n    background-color: #FFFFFF !important;\r\n    color: #0F2E46 !important;\r\n}\r\n.ep-nav .navmenu-highlight {\r\n    background-color: #4D4D4D !important;\r\n    color: #FFFFFF !important;\r\n}\r\n.ep-nav .navmenu:hover {\r\n    background-color: #4D4D4D !important;\r\n    color: #FFFFFF !important;\r\n}\r\n\r\n/*banner background + banner font color*/\r\nheader,\r\nnav#main,\r\nnav#main ul li a,\r\n#header-slogan {\r\n    background-color: #FFFFFF !important;\r\n    color: #0F2E46 !important;\r\n}\r\n\r\n#calendar-month .month-jump,\r\n#calendar-month h2,\r\n.wrapper-dropdown.active #custom_viewby {\r\n    color: #FFFFFF !important;\r\n}\r\n\r\n/*secondary background color + secondary font color */\r\n.list2 .list-event:nth-of-type(odd),\r\n#month thead,\r\n#search-box {\r\n    background-color: #DCDCDC !important;\r\n}\r\n\r\n.list2 .list-event:nth-of-type(odd) .list-event-preview h4 a,\r\n.list2 .list-event:nth-of-type(odd) .quick-link-container ul li a,\r\n.list2 .list-event:nth-of-type(odd) .list-event-preview p,\r\n#month thead,\r\n#month thead tr th,\r\n#search-box label,\r\n#search-box a {\r\n    color: #14284B !important;\r\n}\r\n#lbtnGadgetSubmit {\r\n    color: #FFFFFF !important;\r\n}\r\n#publicBody_siteBody_pageBody_ctl00_lbtnSubmit {\r\n    color: #FFFFFF !important;\r\n}\r\n\u003c/style\u003e","js":"\u003cscript type=\"text/javascript\"\u003e\u003c/script\u003e","highlighted":"","disqus":"","view":{"list":"list.xslt","grid":"grid.xslt","list2":"list2.xslt"},"location":{"include-parent":""},"defaultview":"grid.xslt","gridviewshowmore":"Disabled","eventsperpage":"125","navBar":"","brandingTool":""},"event":{"route":""}}</script>
+    <!-- Meta Tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Mobile Meta Tags -->
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Author  -->
+    <!-- TODO: Determine Who the Context Author Is -->
+    <meta name="author" content="Dude Solutions, Inc., https://www.dudesolutions.com/" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/Layouts/Community/Default Site/Active Data Default/css/style.css?v=2020.05.12" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/Layouts/Community/Default Site/Active Data Default/css/core.css?v=2020.05.12" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/Layouts/Community/Default Site/Active Data Default/css/layout.css" type="text/css" media="screen" />
+    
+    <link href="/scripts/vendor/jquery/ui/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="/Layouts/Community/Default Site/Active Data Default/css/gridprint.css?v2018.1.0" type="text/css" media="print" />
+
+    <script type="text/javascript">
+        var getQueryString = function ( field, url ) {
+            var href = url ? url : window.location.href;
+            var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+            var string = reg.exec(href);
+            return string ? string[1] : null;
+        };
+
+        if (self !== top && !getQueryString('preview')) {
+            var link = document.createElement('link');
+            link.type = 'text/css';
+            link.href = '/Layouts/Community/Default Site/Active Data Default/css/widget.css';
+            link.rel = "stylesheet";
+            document.getElementsByTagName('head')[0].appendChild(link);
+        }
+    </script>
+
+    <!-- Header Scripts -->
+    <script src="/Layouts/Community/Default Site/Active Data Default/js/core.handles.js"></script>
+
+    <!-- formerly addthis script here -->
+    <script type="text/javascript"></script><style type='text/css'>
+/* primary font color no background */
+#search_range,
+#sidebar h3,
+#view-search a.here,
+#view-search #search-link,
+#view-search span,
+#view-search h3,
+.adx-modal h2,
+.date,
+.list-event-locale a,
+.list-event-preview h3 a,
+.quick-link-container ul li a,
+#theme-event-detail-view #event-details-main-content h2,
+.accordion-header,
+th,
+a#back-to-events,
+footer a, 
+.core-title,
+#search_results > div > h2,
+div.event-pagination > ul > li > a, div.event-pagination > ul > li > a:visited, div.event-pagination > ul > li > a:focus,
+a:any-link,
+.core-inline-products-action a,
+.event-detail-contact-person a,
+.full-schedule-container h3 a,
+.accordion-content > div,
+.ep-popuptext > div {
+    color: #14284B !important;
+}
+
+a:-webkit-any-link {
+    color: #14284B !important;
+}
+
+/* secondary font color no background */
+#view-search a,
+#event-favorite-container #event-favorite,
+.list-event-date,
+.list-event-locale, .list-event-locale p a[itemprop="url"] span, .list-event-locale p,
+.list-event-preview p,
+.list-event-preview,
+.event-detail-date p,
+.event-detail-contact-person p,
+#event-detail-copy,
+.results-none p,
+footer p,
+.custom-field-label,
+.event-attachments,
+.core-inline-products tbody td,
+.accordion-content > div.event-attachments,
+.accordion-content > div.event-keywords,
+.share-it-accordion-content h4,
+#search-link em,
+#month tbody .next .date, 
+#month tbody .previous .date ,
+.list2 .list-event:nth-of-type(even) .list-event-preview h4 a,
+.list2 .list-event:nth-of-type(even) .quick-link-container ul li a,
+.list2 .list-event:nth-of-type(even) .list-event-preview p {
+    color: #14284B !important;
+}
+
+/* background */
+body {
+    background: #FFFFFF !important;
+    background-repeat: unset !important;
+    background-position: unset !important;
+    background-attachment: fixed !important;
+    background-size: initial !important;
+}
+
+/* no background */
+.wrap {
+    background-color: #FFFFFF !important;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+}
+
+nav#main {
+    padding-left: 30px;
+    padding-right: 15px;
+}
+
+nav#main,
+img#publicBody_imgLogoImage {
+    margin-left: -15px;
+    margin-top: -10px;
+}
+
+/*primary background color + primary font color */
+.list2 #main-content h3,
+.list2 #main-content h3 a,
+#core_registration .core-button-submit,
+#calendar-month,
+.list-event-link a,
+.wrapper-dropdown.active,
+.core-button-submit,
+div.event-pagination > ul > li > span, div.event-pagination > ul > li > a:hover,
+.ep-popup .ep-adx-primary-action a,
+#core_signin .core-button-container .core-button-submit,
+#core_signup .core-button-container .core-button-submit,
+#core_search .core-button-container .core-button-submit,
+#core_search .core-button-container .core-button-clear,
+#core_guest_registration a, #core_profile_registration a,
+#core_order_confirmation .core-button-submit,
+#top-main .wrap,
+#mobile-nav-link i {
+    background-color: #14284B !important;
+    color: #FFFFFF !important;
+}
+
+/* Navigation Bar */
+.ep-nav {
+    background-color: #FFFFFF !important;
+}
+.ep-nav .navitem {
+    background-color: #FFFFFF !important;
+    color: #0F2E46 !important;
+}
+.ep-nav .navitem-highlight {
+    background-color: #4D4D4D !important;
+    color: #FFFFFF !important;
+}
+.ep-nav .navitem:hover {
+    background-color: #4D4D4D !important;
+    color: #FFFFFF !important;
+}
+.ep-nav .navmenu {
+    background-color: #FFFFFF !important;
+    color: #0F2E46 !important;
+}
+.ep-nav .navmenu-highlight {
+    background-color: #4D4D4D !important;
+    color: #FFFFFF !important;
+}
+.ep-nav .navmenu:hover {
+    background-color: #4D4D4D !important;
+    color: #FFFFFF !important;
+}
+
+/*banner background + banner font color*/
+header,
+nav#main,
+nav#main ul li a,
+#header-slogan {
+    background-color: #FFFFFF !important;
+    color: #0F2E46 !important;
+}
+
+#calendar-month .month-jump,
+#calendar-month h2,
+.wrapper-dropdown.active #custom_viewby {
+    color: #FFFFFF !important;
+}
+
+/*secondary background color + secondary font color */
+.list2 .list-event:nth-of-type(odd),
+#month thead,
+#search-box {
+    background-color: #DCDCDC !important;
+}
+
+.list2 .list-event:nth-of-type(odd) .list-event-preview h4 a,
+.list2 .list-event:nth-of-type(odd) .quick-link-container ul li a,
+.list2 .list-event:nth-of-type(odd) .list-event-preview p,
+#month thead,
+#month thead tr th,
+#search-box label,
+#search-box a {
+    color: #14284B !important;
+}
+#lbtnGadgetSubmit {
+    color: #FFFFFF !important;
+}
+#publicBody_siteBody_pageBody_ctl00_lbtnSubmit {
+    color: #FFFFFF !important;
+}
+</style>
+    <script type="text/javascript">      
+        //Layout Config: Disqus
+        var disqus_shortname = "";
+    </script>
+
+    <script type="text/javascript">
+        //Layout Config: navBar
+        var navConfig = "<item key=\"navBar\" label=\"Navigation Bar\" type=\"ref\" description=\"NavigationBar\" />";
+        $(function () { if (navConfig.length > 0) { renderNavbar(navConfig); } });
+    </script>
+
+    
+
+<meta property="og:title" content="The Consolidated City of Indianapolis/Marion County"/>
+<meta property="og:url" content="https://calendar.indy.gov/"/>
+<meta property="og:image" content="https://calendarmedia.blob.core.windows.net/assets/240838f7-60ef-44e8-842f-76e0011564e6.png"/>
+
+<meta property="og:description" content="The Consolidated City of Indianapolis/Marion County" />
+
+
+
+    
+    
+
+
+    <style type="text/css">
+        .display-more { text-align: center; padding: 10px; font-size: 20px; }
+        .display-more span { cursor: pointer; }
+    </style>
+
+    <script type="text/javascript">
+        ActiveData.EventList.Transform = ActiveData.Variables.runtime.view;
+
+        $(function () {
+            // Set required attributes for gadgets in sidebar
+            $(".list-shareit .supersocialshare").attr("data-url", ActiveData.Variables.runtime.searchUrl);
+            $("a.gadget-link, a.adx-share-sendtogoogle").attr("data-gadgetsite", ActiveData.Variables.site.route);
+
+            // Set view styles
+            if (ActiveData.Variables.runtime.view.indexOf("grid") > -1) {
+                // Grid, make full-width                
+                $("#main-content").css({ "width": "100%", "max-width": "100%" });
+            } else if (ActiveData.Variables.runtime.view.indexOf("list2") > -1) {
+                // List, show sidebar
+                $("#sidebar").removeClass("hide");
+                $("#theme-list-view").addClass("list2");
+                $("#main-content").addClass("list");
+            } else if (ActiveData.Variables.runtime.view.indexOf("list") > -1) {
+                // Summary, show sidebar
+                $("#sidebar").removeClass("hide");
+                $("#theme-list-view").addClass("right-sidebar");
+                $("#main-content").addClass("summary");
+            }
+        });
+
+        function CommitEventFavorite(guid) {
+            //Create a parameters object needed for the request
+            var lParams = { "tenant": "", "site": "" };
+            lParams["tenant"] = ActiveData.Variables.tenant.route;
+            lParams["site"] = ActiveData.Variables.site.route;
+            lParams["get"] = "favorite";
+            lParams["guid"] = guid;
+
+            //Create the URL that will make the call
+            var lUrl = ActiveData.Variables.runtime.baseUrl + "/handlers/query.ashx?" + $.param(lParams);
+
+            $.ajax({
+                type: "POST",
+                url: lUrl,
+                dataType: "jsonp",
+                async: true, cache: false,
+                success: function (response) {
+                   $(top.location).attr('href', response.data);
+                }
+            });
+        }
+    </script>
+
+
+    <script src="/scripts/vendor/jquery/ui/jquery-ui.min.js" type="text/javascript"></script>
+<!-- Google tag (gtag.js) --><script async src=https://www.googletagmanager.com/gtag/js?id=G-E7QQKQVNV1></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-E7QQKQVNV1');</script></head>
+<body id="core_public_body">
+    <form method="post" action="/" id="frmPublicMaster">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMjEwNDQyMTMxMw9kFgJmD2QWAmYPZBYCZg9kFgQCAQ9kFgICDA9kFgJmD2QWAmYPFgIeBFRleHQF/gIKCjxtZXRhIHByb3BlcnR5PSJvZzp0aXRsZSIgY29udGVudD0iVGhlIENvbnNvbGlkYXRlZCBDaXR5IG9mIEluZGlhbmFwb2xpcy9NYXJpb24gQ291bnR5Ii8+CjxtZXRhIHByb3BlcnR5PSJvZzp1cmwiIGNvbnRlbnQ9Imh0dHBzOi8vY2FsZW5kYXIuaW5keS5nb3YvIi8+CjxtZXRhIHByb3BlcnR5PSJvZzppbWFnZSIgY29udGVudD0iaHR0cHM6Ly9jYWxlbmRhcm1lZGlhLmJsb2IuY29yZS53aW5kb3dzLm5ldC9hc3NldHMvMjQwODM4ZjctNjBlZi00NGU4LTg0MmYtNzZlMDAxMTU2NGU2LnBuZyIvPgoKPG1ldGEgcHJvcGVydHk9Im9nOmRlc2NyaXB0aW9uIiBjb250ZW50PSJUaGUgQ29uc29saWRhdGVkIENpdHkgb2YgSW5kaWFuYXBvbGlzL01hcmlvbiBDb3VudHkiIC8+ZAIDD2QWAmYPFgIeBmFjdGlvbgUBLxYCAgMPZBYCAgMPZBYEZg9kFgQCAQ9kFgYCAQ8WAh4JaW5uZXJodG1sBQ5WSUVXIEJZOiBNb250aGQCGQ8PZBYCHgphcmlhLWxhYmVsBQhwcmV2aW91c2QCGw8PZBYCHwMFBG5leHRkAgIPZBYCZg9kFgQCBg8PZBYCHgdvbkNsaWNrBRNUcmFja1NlYXJjaENsaWNrKCk7ZAIKDxYCHgdWaXNpYmxlaGQCAQ9kFgRmDxYCHwIFLlNhdHVyZGF5LCBKdWx5IDEsIDIwMjMgLSBNb25kYXksIEp1bHkgMzEsIDIwMjNkAgIPFgIfBWgWCAIBDxYCHwVoZAIDDxYCHwVoZAIFDw8WAh8FaGRkAgcPDxYCHwVoZGRkpSvKLq4CdPQtdYej5jkZZbyc7RKFcSf/Iiu1tC4XoIo=" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['frmPublicMaster'];
+if (!theForm) {
+    theForm = document.frmPublicMaster;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=lw36DwJ6Q4Ls-WWgo9FdanR49h5QcPaLysvLrqQbuKEKK_zKASg9gOIqdrZt6gu3oY8nuqp4vJA6IK4Fu6rJrUv6b-Sq0AlXh0Yzlf1NxWE1&amp;t=637814473746327080" type="text/javascript"></script>
+
+
+<script src="/ScriptResource.axd?d=SPodwtXor-Zvpd0HG0Y_8Z9e52nBr_cGj3dnA0DqYteNxz16ZYwQLugW5wbbWtitnyJkFXOg7sdqRgQn6rl6fnwnkhKYUbfXiIZSf7W1nb8FR2bkmFHozNtPuGy-4V7az9siv7Cwj8lahq49zBERAGOo_byJqzcVgTqCngxOmKs1&amp;t=49337fe8" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=JQ6X8zobDaMpMJKut6xWG63pw4RILrBs81KtnAUWHkchPTkfhJnG9P5OO07wMB7kzPa6wTQUWNt_7FC_PTunrU9OyuqqP2kjGNTCK2o94zrTTaLaMiLUgJuHAaqk526D8ysCjlVgI5sMNPYCI4NQaZ8JXTPXZMf7AhUtHn6b-aVY08Iv84aPW8RK7G4rXs6b0&amp;t=49337fe8" type="text/javascript"></script>
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="CA0B0334" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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" />
+</div>
+        <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl01$ctl00$ctl00$smPublic', 'frmPublicMaster', [], [], [], 90, 'ctl01$ctl00$ctl00');
+//]]>
+</script>
+
+        
+    <a class="skip-nav" href="#main-content" id="skipNav" tabindex="-1">Skip to main content</a>
+
+    <!-- Layout Header -->
+    <header id="top-main" class="clearfix">
+        <div class="wrap">
+            <a href="#" id="mobile-nav-link" aria-label="mobile navigation link">
+                <i class="fa fa-bars open"></i>
+                <i class="fa fa-times close"></i>
+            </a>
+            <nav id="main" class="main clearfix" aria-label="Main Navigation">
+                <ul><li><a href="/login/"  >Sign In</a></li><li><a href="" onClick="window.print();return false;" >Print</a></li></ul>
+            </nav>
+            <h1 id="logo">
+                <a href="https://www.indy.gov" aria-label="The Consolidated City of Indianapolis/Marion County">
+                    <img id="publicBody_imgLogoImage" src="https://calendarmedia.blob.core.windows.net/assets/240838f7-60ef-44e8-842f-76e0011564e6.png" alt="The Consolidated City of Indianapolis/Marion County" />
+                </a>
+            </h1>
+            <h2 id="header-slogan"></h2>
+        </div>
+        <div class="nav-container">
+            <div style="clear: both;" class="ep-nav">
+                <div class="wrap nav-wrap">
+                    <div id="ep-dynamic-nav"></div>
+                </div>
+            </div>
+            <div style="clear: both;" class="ep-nav nav-more">
+                <div class="wrap nav-wrap">
+                    <div id="ep-dynamic-nav-more"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <header id="widget-top-main" class="clearfix">
+        <div class="wrap">
+            <nav id="widget-main" class="main clearfix">
+                <ul><li><a href="" onClick="redirectToLogIn('https://calendar.indy.gov/login/', 'signin-widget');return false;" >Sign In</a></li></ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="wrap main" >
+        <!-- Layout Body -->
+        
+    <!-- featured events -->
+    
+    <!-- End featuredEvents -->
+
+    
+
+<section id="view-search" class="clearfix">
+    <nav id="view-type" aria-label="Calendar Navigation">
+        <ul id="publicBody_siteBody_UCEventSearch_view_type_list">
+            <li>
+                <h3>View Type: </h3>
+            </li>
+            <!-- Old list view is now titled "Summary View" -->
+            <li id="publicBody_siteBody_UCEventSearch_li_list_view"><a href="/?view=list&search=y" aria-label="Summary View" id="list-view" class="view-icon "><em class="icon-list-alt"></em><span>Summary View</span></a></li>
+
+            <li id="publicBody_siteBody_UCEventSearch_li_grid_view"><a href="/?view=grid&search=y" aria-label="Calendar View" id="calendar-view" class="view-icon here"><em class="icon-calendar"></em><span>Grid View</span></a></li>
+            <!-- New list view added 1/16/2014 -->
+            <li id="publicBody_siteBody_UCEventSearch_li_list2_view"><a href="/?view=list2&search=y" aria-label="List View" id="list2-view" class="view-icon "><em class="icon-list"></em><span>List View</span></a></li>
+        </ul>
+    </nav>
+    
+    <section class="list-subscribe" style="display: none">
+        <h3>Subscribe</h3>
+        <ul style="padding-left: 5px;" class="subscribe-section">
+            <li>
+                <a class="gadget-link" data-gadgetaction="Subscribe" data-gadgetsite="" data-sharetype="rss" data-query="duration=1months" id="rss-icon" aria-label="RSS Subscription, link opens in a new window">
+                    <img alt="Add to RSS" class="core-sidebar-subscribe-icon" src="/Layouts/Community/Default%20Site/Active%20Data%20Default/images/rss-icon2.png"></img>
+                </a>
+            </li>
+            <li>
+                <a class="adx-share-sendtogoogle" data-sharetype="ical" data-gadgetsite="" data-query="duration=1months" data-analytics="SendtoGoogle" aria-label="Add to Google Calendar, link opens in a new window" target="_blank">
+                    <img alt="Add to Google Calendar" class="core-sidebar-subscribe-icon" src="/Layouts/Community/Default%20Site/Active%20Data%20Default/images/share-icons/google.png"></img>
+                </a>
+            </li>
+            <li>
+                <a class="gadget-link add-calendar" data-gadgetaction="Subscribe" data-gadgetsite="" aria-label="iCal Subscription, link opens in a new window" data-query="duration=1months" data-sharetype="ical">
+                    <img alt="Add to Calendar" class="core-sidebar-subscribe-icon" src="/Layouts/Community/Default%20Site/Active%20Data%20Default/images/share-icons/outlook.png"></img>
+                </a>
+            </li>
+            <li>
+                <a class="gadget-link" aria-label="Add Notifications, link opens in a new window" data-gadgetaction="Alert" data-gadgetsite="">
+                    <img alt="Email" class="core-sidebar-subscribe-icon" src="/Layouts/Community/Default%20Site/Active%20Data%20Default/images/notifications_icon.png"></img>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    
+<div id="view-by-container">
+    <div id="view-by" class="wrapper-dropdown">
+        <span id="custom_viewby">VIEW BY: Month</span>
+        <ul class="dropdown" tabindex="1">
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnDay" title="Events for Today" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnDay&#39;,&#39;&#39;)">Day</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnWeek" title="Events for this Week" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnWeek&#39;,&#39;&#39;)">Week</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnMonth" title="Events for this Month" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnMonth&#39;,&#39;&#39;)">Month</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnYear" title="Events for this Year" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnYear&#39;,&#39;&#39;)">Year</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnNext7" title="Events for the Next 7 Days" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnNext7&#39;,&#39;&#39;)">Next 7</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnNext14" title="Events for the Next 14 Days" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnNext14&#39;,&#39;&#39;)">Next 14</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnNext30" title="Events for the Next 30 Days" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnNext30&#39;,&#39;&#39;)">Next 30</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnNext60" title="Events for the Next 60 Days" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnNext60&#39;,&#39;&#39;)">Next 60</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnNext90" title="Events for the Next 90 Days" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnNext90&#39;,&#39;&#39;)">Next 90</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnNext180" title="Events for the Next 5 Months" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnNext180&#39;,&#39;&#39;)">Next 180</a>
+            </li>
+            <li>
+                <a id="publicBody_siteBody_UCEventSearch_ViewBy_lbtnNext365" title="Events for the Next 12 Months" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$lbtnNext365&#39;,&#39;&#39;)">Next 365</a>
+            </li>
+        </ul>
+    </div>
+    <a id="view_by_prev" title="Previous" aria-label="previous" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$view_by_prev&#39;,&#39;&#39;)"><em class="icon-chevron-left"></em><span class="font-awesome-508"><</span>&nbsp;&nbsp;&nbsp;</a>
+    <a id="view_by_next" title="Next" aria-label="next" href="javascript:__doPostBack(&#39;ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$view_by_next&#39;,&#39;&#39;)"><span class="font-awesome-508">></span><em class="icon-chevron-right"></em></a>
+    <input type="hidden" name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$hdnCurrentRange" id="publicBody_siteBody_UCEventSearch_ViewBy_hdnCurrentRange" value="Month" />
+    <input type="hidden" name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$hdnCurrentRangeStartDate" id="publicBody_siteBody_UCEventSearch_ViewBy_hdnCurrentRangeStartDate" value="7/1/2023" />
+    <input type="hidden" name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$ViewBy$hdnCurrentRangeEndDate" id="publicBody_siteBody_UCEventSearch_ViewBy_hdnCurrentRangeEndDate" value="7/31/2023" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //Grid view click next/prev
+            $("#main-content").on("click", ".next-month", function () {
+                var current = $(this).attr("data-month");
+                javascript: __doPostBack('grid_next_month', current)
+            });
+
+            $("#main-content").on("click", ".prev-month", function () {
+                var current = $(this).attr("data-month");
+                javascript: __doPostBack('grid_previous_month', current)
+            });
+
+            //Grid view focused on next/prev and press enter
+            $("#main-content").on("keypress", ".next-month", function (e) {
+                if (e) {
+                    if (e.which == 13) {
+                        var current = $(this).attr("data-month");
+                        javascript: __doPostBack('grid_next_month', current)
+                    }
+                }
+            });
+
+            $("#main-content").on("keypress", ".prev-month", function (e) {
+                if (e) {
+                    if (e.which == 13) {
+                        var current = $(this).attr("data-month");
+                        javascript: __doPostBack('grid_previous_month', current)
+                    }
+                }
+            });
+        });
+    </script>
+
+</div>
+
+    
+
+    <button id="search-link" aria-label="Search" aria-label="Toggle Search Options" aria-expanded="false" aria-controls="search-box"><em class="icon-search"></em><span> Search</span></button>
+</section>
+
+<section id="search-box" class="clearfix">
+    
+<!-- Start Event Search -->
+<script type="text/javascript">
+    $(function () {
+        //Register jQueryUI calendar grid
+
+        //$('.js-calendar').datepicker({
+        //    inline: true,         
+        //    altfield: '.js-date-input',         
+        //    onchangemonthyear: function (year, month, inst) {
+        //        settimeout(function () {                 // add href prev/next anchors can receive tab focus                 
+        //            $('.ui-datepicker-prev, .ui-datepicker-next').attr("href", "#");
+        //        }, 50);
+        //    }
+        //});  // add href prev/next anchors can receive tab focus $('.ui-datepicker-prev, .ui-datepicker-next').attr("href", "#"); 
+
+        //Register jQueryUI calendar for end date selector
+        $(".core-search-end-date").datepicker({
+            maxDate: (new Date(2099, 12 - 1, 31)),
+            minDate: new Date($(".core-search-start-date").val()),
+            onClose: function (dateText, inst) {
+                this.hasDatepickerFocus = false;
+                $(this).datepicker('setDate', $(this).datepicker('getDate')); // manual input validation
+            }
+        }).focus(function () {
+            var element = this;
+            setTimeout(function() { // setTimeout is  needed b/c `$(".core-search-end-date").datepicker()` is called from `onClose` of  $(".core-search-start-date")
+                if (element.hasDatepickerFocus) {
+                    element.hasDatepickerFocus = false;
+                } else {
+                    setDatetimeTripper(element);
+                    element.hasDatepickerFocus = true;
+                }
+            });
+        });
+
+        //Register jQueryUI calendar for start date selector
+        $(".core-search-start-date").datepicker({
+            minDate: (new Date(1980, 1 - 1, 1)),
+            maxDate: (new Date(2099, 12 - 1, 31)),
+            onClose: function (dateText, inst) {
+                $(this).datepicker('setDate', $(this).datepicker('getDate')); // manual input validation
+                this.hasDatepickerFocus = false;
+                $(".core-search-end-date").datepicker("option", "minDate", new Date(dateText));
+            }
+        }).focus(function () {
+            if (this.hasDatepickerFocus) {
+                this.hasDatepickerFocus = false;
+            } else {
+                setDatetimeTripper(this);
+                this.hasDatepickerFocus = true;
+            }
+        });
+
+        $("#core_search_category a").on("click", function () {
+            ActiveData.Gadgets.Show({ 'action': 'Category', title: "Category", filter: { "Resize": "Y" } });
+            $(".core-search-category").val("");
+        });
+        $("#core_search_location a").on("click", function () {
+            ActiveData.Gadgets.Show({ 'action': 'Location', title: "Location", filter: { "Resize": "Y" } });
+            $(".core-search-location").val("");
+        });
+
+        $("#core_search_proximity input[type='text']").autocomplete({
+            minLength: 2,
+            source: function (request, response) {
+                $("#core_search_proximity input[type='hidden']").val("");
+                $.ajax({
+                    url: "/handlers/locationsearch.ashx?max=10&input=" + $("#core_search_proximity input[type='text']").val(),
+                    dataType: 'jsonp',
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            if (item.Latitude != 0 & item.Longitude != 0)
+                            {
+                                return {
+                                    label: item.City + ', ' + item.Region,
+                                    val: item.Latitude + ',' + item.Longitude
+                                }
+                            }
+                            else {
+                                return {
+                                    label: 'No Results',
+                                    val: ''
+                                }
+                            }
+                        }))
+                        $("#core_search_proximity input[type='hidden']").val("")
+                    }
+                });
+            },
+            select: function (event, ui) {
+                if (ui.item.val != '') {
+                    $("#core_search_proximity input[type='hidden']").val(ui.item.val);
+                }
+                else {
+                    $("#core_search_proximity input[type='text']").val("");
+                    event.preventDefault();
+                }
+            },
+            delay:500
+        });
+
+
+        $("#core_search_proximity input[type='text']").bind("change", function (e) {
+            var val=$("#core_search_proximity input[type='text']").val();
+            if (!val)
+            {
+                $("#core_search_proximity input[type='hidden']").val("");
+            }
+        });
+
+        //Adjust the classes used by the search
+        switch ($("#core_search > div").length - 1) {
+            case 5: $("#core_search").addClass("five-fields"); break;
+            case 4: $("#core_search").addClass("four-fields"); break;
+            case 3: $("#core_search").addClass("three-fields"); break;
+            case 2: $("#core_search").addClass("two-fields"); break;
+            case 1: $("#core_search").addClass("one-fields"); break;
+        }
+
+
+
+        /*  ghost text for proximity fields  */
+        var proximity_text = "events near";
+        if (!$("#core_search_proximity input[type='text']").val() | $("#core_search_proximity input[type='text']").val() == proximity_text)
+        {
+            $("#core_search_proximity input[type='text']").val(proximity_text);
+            $("#core_search_proximity input[type='text']").addClass("ghost-text");
+        }
+
+        $("#core_search_proximity input[type='text']").bind("focus", function (e) {
+            if($("#core_search_proximity input[type='text']").hasClass("ghost-text"))
+            {
+                $("#core_search_proximity input[type='text']").removeClass("ghost-text");
+                $("#core_search_proximity input[type='text']").val("");
+            }
+        });
+
+        $("#core_search_proximity input[type='text']").bind("blur", function (e) {
+            if (!$("#core_search_proximity input[type='text']").val()) {
+                $("#core_search_proximity input[type='text']").val(proximity_text);
+                $("#core_search_proximity input[type='text']").addClass("ghost-text");
+            }
+        });
+
+        var proximity_radius_text = "from city state zip";
+
+        if (!$("#core_search_proximity_radius input[type='text']").val() | $("#core_search_proximity_radius input[type='text']").val() == proximity_radius_text) {
+            $("#core_search_proximity_radius input[type='text']").val(proximity_radius_text);
+            $("#core_search_proximity_radius input[type='text']").addClass("ghost-text");
+        }
+
+        $("#core_search_proximity_radius input[type='text']").bind("focus", function (e) {
+            if ($("#core_search_proximity_radius input[type='text']").hasClass("ghost-text")) {
+                $("#core_search_proximity_radius input[type='text']").removeClass("ghost-text");
+                $("#core_search_proximity_radius input[type='text']").val("");
+            }
+        });
+
+        $("#core_search_proximity_radius input[type='text']").bind("blur", function (e) {
+            if (!$("#core_search_proximity_radius input[type='text']").val()) {
+                $("#core_search_proximity_radius input[type='text']").val(proximity_radius_text);
+                $("#core_search_proximity_radius input[type='text']").addClass("ghost-text");
+            }
+        });
+
+        
+        $("#core_search_submit input[type='submit']").on("click", function () {
+            if ($("#core_search_proximity_radius input[type='text']").hasClass("ghost-text")) {
+                $("#core_search_proximity_radius input[type='text']").val("");
+            }
+            if($("#core_search_proximity input[type='text']").hasClass("ghost-text"))
+            {
+                $("#core_search_proximity input[type='text']").val("");
+            }
+        });
+
+    });
+
+    function doSearch()
+    {
+        if(ActiveData.Variables.runtime.isDetails)
+        {
+            window.location= ActiveData.Variables.runtime.listUrl + "?search=y";
+        }
+        else {
+            //if (window.parent.ADX) {
+            //    //Hide the gadget if possible
+            //    window.parent.ActiveData.Gadgets.Hide();
+            //}
+            window.parent.document.getElementById("frmPublicMaster").submit();
+        }
+    }
+
+    function TrackSearchClick() {
+        var startDate = $(".core-search-start-date").val();
+        var endDate = $(".core-search-end-date").val();
+        var keyword = $(".core-search-keywords").val();
+        if (typeof gtag != 'undefined') {
+            gtag('event', 'event_search', { 'Date_Range': startDate + ' ' + endDate });
+            gtag('event', 'event_search', { 'Keywords': keyword });
+        }
+    }
+
+    ActiveData.Variables.runtime.searchUrl = 'http://calendar.indy.gov/?startdate=7/1/2023&enddate=7/31/2023';
+
+</script>
+
+
+<style>
+    .ui-autocomplete {
+        max-height: 210px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+
+    .ghost-text {
+        color: #ccc;
+    }
+</style>
+
+
+<div id="core_search" class="core-primary-container"><div id="core_search_start_date" class="core-input-container"><label for="publicBody_siteBody_UCEventSearch_UCEventSearch_txtStartDate" id="publicBody_siteBody_UCEventSearch_UCEventSearch_lblStartDate" class="core-label">Start Date</label><input name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$UCEventSearch$txtStartDate" type="text" value="7/1/2023" id="publicBody_siteBody_UCEventSearch_UCEventSearch_txtStartDate" class="core-search-start-date core-text" /></div><div id="core_search_end_date" class="core-input-container"><label for="publicBody_siteBody_UCEventSearch_UCEventSearch_txtEndDate" id="publicBody_siteBody_UCEventSearch_UCEventSearch_lblEndDate" class="core-label">End Date</label><input name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$UCEventSearch$txtEndDate" type="text" value="7/31/2023" id="publicBody_siteBody_UCEventSearch_UCEventSearch_txtEndDate" class="core-search-end-date core-text" /></div><div id="core_search_keywords" class="core-input-container"><label for="publicBody_siteBody_UCEventSearch_UCEventSearch_txtKeywords" id="publicBody_siteBody_UCEventSearch_UCEventSearch_lblKeywords" class="core-label">Keyword</label><input name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$UCEventSearch$txtKeywords" type="text" maxlength="1000" id="publicBody_siteBody_UCEventSearch_UCEventSearch_txtKeywords" class="core-search-keywords core-text" /></div><div id="core_search_category" class="core-input-container"><label for="publicBody_siteBody_UCEventSearch_UCEventSearch_ddlCategory" id="publicBody_siteBody_UCEventSearch_UCEventSearch_lblCategory" class="core-label">Category</label><select name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$UCEventSearch$ddlCategory" id="publicBody_siteBody_UCEventSearch_UCEventSearch_ddlCategory" class="search-category core-dropdown">
+	<option selected="selected" value="">Select</option>
+	<option value="65b71c719aa04ae9922a0b8e8b4ed21a">Animal Care Services</option>
+	<option value="61632630c3e341cea714e6d161045413">-Animal Care &amp; Control Board</option>
+	<option value="5696cd7fa1cb4cd89dbc5abf59077bfb">Assessor&#39;s Office</option>
+	<option value="f13b6eacfd484e2b8e92ca64eb17852c">-County Property Tax Assessment Board of Appeals</option>
+	<option value="9adf0231b40f4ead87c79d426bd46d00">Auditor&#39;s Office</option>
+	<option value="b0fb47ae4e134394b6753871ddbaf22b">Circuit Court</option>
+	<option value="d8017d5db2644e3aaae66a4b882de38f">Citizens&#39; Police Complaint Office</option>
+	<option value="c2058344e5e544d4a18b57baba89f016">-Citizens&#39; Police Complaint Board</option>
+	<option value="b9f1730215104c258fd20276cf63f630">City-County Council</option>
+	<option value="d3b3dc524394407695cc1e760a70edea">-Administration &amp; Finance Committee</option>
+	<option value="71721f76422c4e88a055fdacc28e8af0">-Committee on Committees</option>
+	<option value="2511405998054e3eb8a08d9133f1bd32">-Community Affairs Committee</option>
+	<option value="cf032acd3ddf44fa8b7dde57a01fa36d">-Education Committee</option>
+	<option value="c6a456e8182c4af6a67f640530edc0ef">-Ethics Committee</option>
+	<option value="346d7a8f25f344b2a40892b114727b8a">-Metropolitan and Economic Development Committee</option>
+	<option value="a42ac823e5a24e04aeb7a9805b1be4d9">-Municipal Corporations Committee</option>
+	<option value="c5157d0b0a5e4fce89bfe193ca9c9da5">-Parks &amp; Recreation Committee</option>
+	<option value="04084d80a63d46bcae468c2718d1a771">-Public Safety and Criminal Justice Committee</option>
+	<option value="a6f7a17ec42047d9982c718cc38c4240">-Public Works Committee</option>
+	<option value="fd9684508c594a199c6c5fc43a22d1ea">-Rules &amp; Public Policy Committee</option>
+	<option value="950685ca948c4649ad5b183fbb36c7cf">Clerk&#39;s Office</option>
+	<option value="8fc2a65792d441558d0526ea8c03873d">Coroner&#39;s Office</option>
+	<option value="8d432965489846e183d34dee31e8c995">-Domestic Violence Fatality Review Team</option>
+	<option value="c951c155ccbb47d6b742935426cd221d">Department of Business &amp; Neighborhood Services</option>
+	<option value="2ac3641d343a407eac40b8d97a54d862">-Board of Business &amp; Neighborhood Services</option>
+	<option value="7fe28c3fc4aa40efa4e8079ca2ced076">-Board of Electrical Examiners</option>
+	<option value="376460c689c349d493d749ad17cf4b5b">-Board of General Contractors</option>
+	<option value="213a30976c8046ba9e264e5583a6e56b">-Board of Heating &amp; Cooling Examiners</option>
+	<option value="d6a003e82ed14a309886b55010dc6cd7">-Board of Wrecking Examiners</option>
+	<option value="1e874bbc67c941bf89da5c9784212f14">Department of Metropolitan Development</option>
+	<option value="9f8244f959524c9daf8659216521eb6e">-Central Indiana Regional Development Authority</option>
+	<option value="c5a03b3dc6ef4a85a063f40de52ecf9a">-Housing Trust Fund Advisory Committee</option>
+	<option value="b3d9a0f4e08d466294f71e107b2c5702">-Metropolitan Board of Zoning Appeals Division I</option>
+	<option value="bbdb2f4ad36d40abadf18ac68fed4205">-Metropolitan Board of Zoning Appeals Division II</option>
+	<option value="33fc4d235efc40a98a4d91ba2cd63390">-Metropolitan Board of Zoning Appeals Division III</option>
+	<option value="b96d96efa1f642999caaf7a854bb025b">-Metropolitan Development Commission</option>
+	<option value="be49779015b44973811004990e9c4875">-Metropolitan Hearing Examiner</option>
+	<option value="2fd7a737016d4ee7a2e2219037a7836e">-Metropolitan Hearing Officer</option>
+	<option value="02cfe0aef1ac4ac4bb5574463ae7c54a">-Metropolitan Plat Committee</option>
+	<option value="8c26e780fdbe4393a1a3345c221f86a5">-Metropolitan Regional Center Hearing Examiner</option>
+	<option value="39276a859d1243d1bb333f37d3dfa220">-Oaktree Events</option>
+	<option value="131914a8d9604a65a07ae63d707fda52">Department of Public Works</option>
+	<option value="1a11133393014bebb003a19eec1c33fb">-Board of Public Works</option>
+	<option value="e1a1824be8904c329b29854da9e0aa81">Human Resources</option>
+	<option value="dcb96350bb224cebac63fc8f4f5a20fd">Indianapolis Fire Department</option>
+	<option value="65c1d215bb8646eaa60da87790da2502">Indianapolis Historic Preservation Commission</option>
+	<option value="786adfaa501d4476beaa55222d0db554">Indianapolis Metropolitan Police Department</option>
+	<option value="0cfa2485084e42f7b2f6d9e249c6a31f">-Homeland Security</option>
+	<option value="a7a1de0a1c5c4b459b9af62cc5229d42">-In Memoriam</option>
+	<option value="2cccca93e141494487c60f987c85348a">-Police Merit Board</option>
+	<option value="841fea9bd4a84d15a3680060f0b37287">Indy Parks</option>
+	<option value="4844ec9a3d8e499d8a5bf6d6896dc5fb">-Board of Parks &amp; Recreation</option>
+	<option value="a6e832e669ef41c3ab5b9ac23744259c">-Concert in the Park</option>
+	<option value="cd576839778842848e814d0fd864856b">Information Services Agency</option>
+	<option value="6b3a4fd5869d40f684ff9a1a0330bfe5">-Enhanced Access Review Committee</option>
+	<option value="a6e045a7af1e44f6a7dc9751ae66748e">-Information Technology Advisory Committee</option>
+	<option value="c2dae06611e94acf9cc07dfc3c6251d3">-Information Technology Board</option>
+	<option value="cc2fd4f51b1b4e5c85bb52f9b39720ff">Marion County Commissioners</option>
+	<option value="805f18b56d8e428792a49d09525aace2">Marion County Community Corrections</option>
+	<option value="d4cfa060d40c418fab72f8d6f8704960">-Marion County Community Corrections Advisory Board</option>
+	<option value="123e53bfa79a4f6ebbeefce5a892120c">Marion County Election Board</option>
+	<option value="15561fbdaa86461490b9121ba2639451">-Election Board</option>
+	<option value="9aa7edd3a9e74033ab58051b44a28b7f">Marion County Forensic Services Agency</option>
+	<option value="e93aaeb2e1064fb6930a1b80a2bbda39">-Forensic Services Board</option>
+	<option value="00d87dd9f6474509aa82d984941295ea">Marion County Prosecutor&#39;s Office</option>
+	<option value="478ed7be8deb424f9d57eb090b7f5074">Marion County Public Defender Agency</option>
+	<option value="988e15c6842e45e3a8a83866fd649c26">-Marion County Public Defender Board</option>
+	<option value="a58803373d75455ba31d8b2097c43fb8">Marion County Sheriff&#39;s Office</option>
+	<option value="8626170caafc4c40b0bf355687bb5239">Marion County Voter Registration</option>
+	<option value="de21f67a08f04a4391ce1b2bc6b0590b">Marion Superior Courts</option>
+	<option value="d4af520561e74047bd10b0c86a443c93">-Jury Pool</option>
+	<option value="2ec218b6d546491c97062979db7878cf">-Juvenile Detention Center Advisory Board</option>
+	<option value="e12a6146a1a949dc9304061739e52146">-Probation</option>
+	<option value="29c811494bae466c967c2ad6a41d7002">Mayor&#39;s Action Center</option>
+	<option value="81d9eb20d9a2462497428be6cbcedf61">Mayor&#39;s Office</option>
+	<option value="7187fc63f0404039a053f082b06c9339">-Indianapolis Charter School Board</option>
+	<option value="fad769ec17f24403894399925be3f5b9">-Indianapolis Economic Development Commission</option>
+	<option value="18f2c00a60464d2b867ed74a9c759b15">-Mayor&#39;s Latino Advisory Council</option>
+	<option value="6c9c38feb21f4900a36b4577d941c235">-Mayor&#39;s Neighborhood Advocates</option>
+	<option value="1db6016f2056425c80f3d94df96532ba">-Neighborhood Services</option>
+	<option value="927b5d12fd35425ca5035482ced0e0ff">Office of Audit &amp; Performance</option>
+	<option value="52f6de4f3df74e9d931713c4f566d476">-City-County Audit Committee</option>
+	<option value="c286fe1cce7a46d992ab85e1ee3c4f6a">Office of Corporation Counsel</option>
+	<option value="921fe624877d4b76b7446d8f93e25b44">-Equal Opportunity Advisory Board</option>
+	<option value="32ec36748d78436d87172566499aca43">-Ethics Commission</option>
+	<option value="d63df74b40fd493db8a55582a16a264b">Office of Finance Management</option>
+	<option value="b017b4b9fa844119aa6cdbd2d2072350">Office of Minority and Women Business Development</option>
+	<option value="83f48fed87f549a7b99262b0fccd96b7">Office of Public Health &amp; Safety</option>
+	<option value="6549354db3184198a61899a43e97bab5">-Board of Public Safety</option>
+	<option value="5d0673095c604c628d7bc8071e345f9b">-Marion County Criminal Justice Planning Council</option>
+	<option value="2120e58fdac74945aaeb49b4160f265e">Office of Sustainability</option>
+	<option value="9214990d121a4e30b2eee43ab1adbc07">Purchasing Division</option>
+	<option value="708123425aff4aea98890b5a2e534d33">Recorder&#39;s Office</option>
+	<option value="65cfd6fad20642279d4d46ba60d85069">Special Events</option>
+	<option value="982cce1205314ec2b807809afbdc03f2">-Block Party</option>
+	<option value="949d0215e3e141d88044cbedb6731fa8">-Indy Pride</option>
+	<option value="141984805f7f4d939694ef4c86b579b6">-The 500-Mile Race Festival</option>
+	<option value="6ceb87684fde42efa55b9ef638f240f6">-The Circle of Lights</option>
+	<option value="6795e509a35a480f8551e1be921a3544">-The Indiana Black Expo</option>
+	<option value="45cfb8f53eac4532a400fb5a7862d295">-The Indiana State Fair</option>
+	<option value="9f76db4fe67f421391e136d0c636be60">-The Original Farmer&#39;s Market</option>
+	<option value="6d18ffbda23a428f91da7548059c9285">-The St. Patrick&#39;s Day Parade</option>
+	<option value="1241915be8284c3696498cad714b2ff4">Surveyor&#39;s Office</option>
+	<option value="06863142dc6c4a0da39679c0be2d9000">Telecom &amp; Video Services Agency</option>
+	<option value="02faf14869044b62bcb67d3289b1bb7d">-Telecom &amp; Video Services Board</option>
+	<option value="9148831af9c34cb3921d4c414aa3c880">Treasurer&#39;s Office</option>
+
+</select><a href="javascript:void(0)">Select Multiple</a></div><div id="core_search_location" class="core-input-container"><label for="publicBody_siteBody_UCEventSearch_UCEventSearch_ddlLocation" id="publicBody_siteBody_UCEventSearch_UCEventSearch_lblLocation" class="core-label">Location</label><select name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$UCEventSearch$ddlLocation" id="publicBody_siteBody_UCEventSearch_UCEventSearch_ddlLocation" class="search-location core-dropdown">
+	<option selected="selected" value="">Select</option>
+	<option value="e2f6840107034cf6a2fe7be4bcc2f2b6">Assessor&#39;s Office</option>
+	<option value="e4ccce2b5af4488db22de7592fd0e148">-Assessor&#39;s Office - East</option>
+	<option value="20f10a40b31c47a784e43c72f722a7dd">-Assessor&#39;s Office - North</option>
+	<option value="138311d0961741dd850eadb3b035d7a7">-Assessor&#39;s Office - South</option>
+	<option value="4dd7fa14cf1f47179ef72adba2b24b84">Auditor&#39;s Office</option>
+	<option value="963a27f2d6704111b37adf1354035d6a">Board of Voters Registration</option>
+	<option value="8f990977a5224b148ca709fb484a026c">Circuit Court</option>
+	<option value="7bd87dc67da342c6ba8a7b5053a230aa">Citizen&#39;s Police Complaint Office</option>
+	<option value="f4f1621ee11c4ca69df51b5841d499bf">City-County Building</option>
+	<option value="84dbd05481744c7bb3b4fd2bb37969a9">-Meeting Room 107</option>
+	<option value="65064f0fe0a04ee4a5284e83b65a0e0d">-Meeting Room 1826</option>
+	<option value="afe52ccf870e49bd824abe64f1a9db79">-Meeting Room 2001</option>
+	<option value="060b54ffb88844eb8e7f1d37181c68c5">-Meeting Room 224</option>
+	<option value="eb7a5fd4de8d4764b57fc188e418757a">-Meeting Room 260</option>
+	<option value="06f77ee5a7044b7e82e6d550ed7e354c">-Public Assembly Room (PAR)</option>
+	<option value="774a3153ff2948b1906cc106b51dacae">City-County Council</option>
+	<option value="da1b5cdd208e45fbb4901b780d253a99">Clerk&#39;s Office</option>
+	<option value="a1871390281744ceab8dceba2d202f4c">Coroner&#39;s Office</option>
+	<option value="63ac41d9eeb242c7acb7fdbc30be160e">Department of Business &amp; Neighborhood Services</option>
+	<option value="68e9009c11864a06aff062c73c1046a2">-Vonnegut Conference Room</option>
+	<option value="bdf0fdb16fc94fa59770b623256cf3f2">Department of Metropolitan Development</option>
+	<option value="3d2ef1831ea34e2aa3b7c1326a66e16e">Department of Public Works</option>
+	<option value="0d8e619eddbf49d99da2ddb47f0cce5b">Human Resources</option>
+	<option value="6d04cdd805db4477a0fa21bddc000f02">Indianapolis Fire Department Headquarters</option>
+	<option value="c14d7ecc07024d4eb02eecb05cec7b6a">Indianapolis Historic Preservation Committee</option>
+	<option value="819a2b3073bf45b7984591e07fc89473">Indianapolis Metropolitan Police Department</option>
+	<option value="18ccee40c0df4343963f220fb79d4198">-IMPD Downtown District</option>
+	<option value="4ffd28ce2ff84245999850961f9d4204">-IMPD East District</option>
+	<option value="70f81237b00d4632a9a3cd67dd3f436b">-IMPD Homeland Security Bureau</option>
+	<option value="d08045c5e8cc449eb64597ee1568eb29">-IMPD North District</option>
+	<option value="d60124c7237a4a2d8aa9345d7efda37d">-IMPD Northwest District</option>
+	<option value="da3bbeae085e485b847b63816d2ed640">-IMPD Southeast District</option>
+	<option value="6fdc267f630a4c349e3daa6a07be045f">-IMPD Southwest District</option>
+	<option value="0280304aadff4c9180a53fd8b7b1b5b1">Indy Parks &amp; Recreation</option>
+	<option value="38ea7644fbc542e6877f02b327a25067">-Bethel Park</option>
+	<option value="6b9a94ebbad045cba6cbfb8559867476">-Broad Ripple Park</option>
+	<option value="864fdf8ab02442aa8db75409b1b1493a">-Brookside Park</option>
+	<option value="686cef7d0af947efa3d27138e2934167">-Christian Park</option>
+	<option value="4c0da766c20343c2bdbeef6942b26378">-Chuck Klein Softball Complex</option>
+	<option value="a6e21f70e29243db87495b8184f60ae8">-Douglass Park</option>
+	<option value="b91a753a9d884b8686440833139e413f">-Dr. Martin Luther King Jr. Park</option>
+	<option value="c37602595f9645a4adbceb67d1a8ca14">-Eagle Creek Park</option>
+	<option value="92129c3c16e84f5890d655f7a468b251">-Ellenberger Park</option>
+	<option value="9e04f014f1764fa4bb2e311bb9ad9cb5">-Garfield Regional Park</option>
+	<option value="aa32bc585bf5480fb25c0fe3daf24968">--Garfield Conservatory</option>
+	<option value="f28acf9476354da2ac98511de4431f6a">--Garfield Park Arts Center</option>
+	<option value="ae3fef0782ec4b92af5b57c169d4fe2e">--MacAllister Amphitheater</option>
+	<option value="d44adfeceb5f4f54ad7317063d3ade97">-Gustafson Park</option>
+	<option value="5659a4985a3342d08b7b25168730e741">-Holliday Park</option>
+	<option value="97e77aa582004d77a21d2eea03b84977">-Indianapolis World Sports Park</option>
+	<option value="e4d4e30ace1040ea9258b5536d8fe3d6">-JTV Hill Park</option>
+	<option value="529f83ef758e45e1bd9825ee546600c3">-Juan Solomon Park</option>
+	<option value="c91e0d128651468c971308c36e33e53b">-Krannert Park</option>
+	<option value="266f3e7fb98345fb9da35c57a061691f">-Kuntz Soccer Stadium</option>
+	<option value="40cc6c9d43e54d4282f454b3c62ddb70">-Mary &amp; John Geisse Soccer Complex</option>
+	<option value="9920857be0fd4298a3c8d2431b5f65ff">-Municipal Gardens Park</option>
+	<option value="6bc60c867c49409487fa7d152cdb3f32">-Northwestway Park</option>
+	<option value="2ef19141e6fd4240b47e40acfba5588a">-O&#39;Bannon Old Northside Soccer Park</option>
+	<option value="cc8ef8f5a75c4f53b3855cbb21ee1a58">-Perry Park</option>
+	<option value="7e3e2b30356d4482a13f3cd044234f64">-Pride Park</option>
+	<option value="b24f54b9d15840e5a00ee6972c148b82">-Raymond Park / Indy Island</option>
+	<option value="64954281ffed430f887048e1660466d5">-Rhodius Park</option>
+	<option value="ce59ff5f1b824a82b30f3d10d36bba37">-Riverside Regional Park</option>
+	<option value="d85c17ec46c14ac2a9d8949118c8d460">-Sahm Park</option>
+	<option value="bdcbda594d3740ea9df6d3873b863be5">-Southeastway Park</option>
+	<option value="44b8f6cde4534462a6b8149b10a063e9">-Southwestway Park</option>
+	<option value="43c78d8c165540dabb984509bb4eae07">-Tarkington Park</option>
+	<option value="be8751e596dc458bb77d63b03201d122">-Thatcher Park</option>
+	<option value="129f2fabd44f4a698015048bfe186dd2">-Washington Community School Pool</option>
+	<option value="0dde0ba4d6964964ba103c181e0254f2">-Washington Park</option>
+	<option value="50f29b1c836c4758a6b8af7be9bb8614">-Watkins Park</option>
+	<option value="12d5a49437e2407ead47da4239847f60">-Willard Park</option>
+	<option value="267a843271694a29a8bc7d313afa6c14">-Windsor Village Park</option>
+	<option value="e2a98b4e88914c91a4e2b0fe20db9011">Information Services Agency</option>
+	<option value="67f2cb66f6f745c382f6ab95cc80775a">Marion County Community Corrections</option>
+	<option value="2c374537143245ba8b30d8babb56add9">Marion County Election Board</option>
+	<option value="6838d3c8e55846cf985132fab585b50e">Marion County Forensic Services Agency</option>
+	<option value="2da4cdc8ea0641b6ad70bd595e3f9e00">Marion County Prosecutor&#39;s Office</option>
+	<option value="8cd632aab7f54c618cc21c7fe83c5834">Marion County Public Defender</option>
+	<option value="bf3b4cea4d5142f3a9747dd2bd9331da">Marion County Sheriff&#39;s Office</option>
+	<option value="10d26cbb868347a6a8f56688bab01488">Marion Superior Court</option>
+	<option value="717deecbf042441a94fce92e6853b208">-Probation Office</option>
+	<option value="88c6504c61d14846a6602d1f9b388d62">Mayor&#39;s Action Center</option>
+	<option value="b0b5b36ed7c241a889e42fb1223f9a39">Mayor&#39;s Office</option>
+	<option value="6a040daa1c9143e5aa8ea7858bebd440">Office of Audit and Performance</option>
+	<option value="a1fa1804088340c28019e28de666599b">Office of Corporation Counsel</option>
+	<option value="eca4f5b5b61c4a05bda88272c6cbe943">WebEx</option>
+
+</select><a href="javascript:void(0)">Select Multiple</a></div>
+    <div id="core_search_submit" class="core-button-container">
+        <input type="submit" name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$UCEventSearch$btnSearch" value="Search" onclick="TrackSearchClick();" id="btnSearch" class="core-button-search core-button-submit" />
+        <input type="submit" name="ctl01$ctl00$ctl00$publicBody$siteBody$UCEventSearch$UCEventSearch$lbtnClearSearch" value="Clear" id="lbtnClearSearch" class="core-button-clear" />
+        
+    </div>
+</div>
+
+<!-- End Event Search -->
+
+</section>
+
+
+
+    <div id="search_range">Saturday, July 1, 2023 - Monday, July 31, 2023</div>
+
+
+<div style="clear: both;"></div>
+<script type="text/javascript">
+    $(function () {
+        if ($("#search_results").length > 0) {
+            $('#search-box').show();
+        }
+    });
+</script>
+
+
+    <section id="theme-list-view" class="clearfix">
+        <section id="main-content">
+            <!-- URL -->
+            <script>
+                pathArray = window.location.href.split('/'); protocol = pathArray[0]; host = pathArray[2]; base_url = protocol + '//' + host;
+            </script>
+
+            
+            <div class="adx-rendering" data-async="true"></div>
+            <div class="event-pagination"></div>
+        </section>
+
+        <aside id="sidebar" class="hide">
+
+            <section class="list-shareit">
+                <h3>Share It</h3>
+                <div class="supersocialshare" data-networks="linkedin,twitter,facebook" data-url="" data-open="true" data-animate="false"></div>
+
+                <span class="social-share-508">
+                    <a id="social-share-facebook" class="social-share-508">Facebook</a>
+                    <br />
+                    <a id="social-share-twitter" class="social-share-508">Twitter</a>
+                    <br />
+                    <a id="social-share-linkedin" class="social-share-508">LinkedIn</a>
+                </span>
+
+            </section>
+
+            <section class="list-subscribe">
+                <h3>Subscribe</h3>
+                <ul style="padding-left: 5px;" class="subscribe-section">
+                    <li>
+                        <a class="gadget-link" data-gadgetaction="Subscribe" data-gadgetsite="" data-sharetype="rss" data-query="duration=1months" id="rss-icon" aria-label="RSS Subscription, link opens in a new window" href="#">
+                            <img alt="Add to RSS" class="core-sidebar-subscribe-icon" src="/Layouts/Community/Default%20Site/Active%20Data%20Default/images/rss-icon2.png" />
+                        </a>
+                    </li>
+                    <li>
+                        <a class="adx-share-sendtogoogle" data-sharetype="ical" data-gadgetsite="" data-query="duration=1months" data-analytics="SendtoGoogle" aria-label="Add to Google Calendar, link opens in a new window" target="_blank">
+                            <img alt="Add to Google Calendar" class="core-sidebar-subscribe-icon" src="/Layouts/Community/Default%20Site/Active%20Data%20Default/images/share-icons/google.png" />
+                        </a>
+                    </li>
+                    <li>
+                        <a class="gadget-link add-calendar" data-gadgetaction="Subscribe" data-gadgetsite="" aria-label="iCal Subscription, link opens in a new window" data-query="duration=1months" data-sharetype="ical" href="#">
+                            <img alt="Add to Calendar" class="core-sidebar-subscribe-icon" src="/Layouts/Community/Default%20Site/Active%20Data%20Default/images/share-icons/outlook.png" />
+                        </a>
+                    </li>
+                    <li>
+                        <a class="gadget-link" aria-label="Add Notifications, link opens in a new window" data-gadgetaction="Alert" data-gadgetsite="" href="#">
+                            <img alt="Email" class="core-sidebar-subscribe-icon" src="/Layouts/Community/Default%20Site/Active%20Data%20Default/images/notifications_icon.png" />
+                        </a>
+                    </li>
+                </ul>
+            </section>
+
+        </aside>
+    </section>
+
+
+    <!-- Application Syndication Manager -->
+    
+<script type="text/javascript">
+    function TrackSyndicationClick(item) {
+        if (typeof _gaq != 'undefined') {
+            _gaq.push(['_trackEvent', 'Syndication', 'Click', item]);
+        }
+    }
+
+    //$(function () {
+    //    initUCSyndication();
+    //});
+
+    function initUCSyndication() {
+        //Get all links that need to be "linked"
+        var lSite = ActiveData.Variables.site.route;
+        var lTenant = ActiveData.Variables.tenant.route;
+        var lLinksFound = false;
+
+        //Generic Links
+        $(".adx-share-link").each(function () {
+            //Link Items Found
+            var lType = $(this).attr("data-sharetype");
+            var lDataQuery = $(this).attr("data-query");
+
+            if (!lDataQuery) {
+                lDataQuery = $("#hdnQueryParams").val();
+            }
+
+            var lurl = ActiveData.Routes.Generic("page", lType, lDataQuery, lTenant, lSite);
+            if (lType.toLowerCase() == "ical") {
+                var lBaseUrl = ActiveData.Variables.BaseUrl.replace("http://", "webcal://");
+                lurl = lBaseUrl + lurl;
+            }
+            $(this).attr("href", lurl);
+
+        }).click(function () { TrackSyndicationClick($(this).attr("data-analytics")); });
+
+        //Specialized Links
+        $(".adx-share-sendtogoogle").each(function () {
+            //Link Items Found
+            var lType = $(this).attr("data-sharetype");
+            var lDataQuery = $("#hdnQuerySendEventToGoogle").val();
+            var lBaseUrl = ActiveData.Variables.runtime.baseUrl;
+
+            var regex = /^https/i;
+            if (regex.test(lBaseUrl)) {
+                lBaseUrl = "http" + lBaseUrl.substring(5);
+            }
+
+            $(this).attr("href", "https://www.google.com/calendar/render?cid=" + encodeURIComponent(lBaseUrl + ActiveData.Routes.Generic("page", lType, lDataQuery, lTenant, lSite)));
+
+        }).click(function () { TrackSyndicationClick($(this).attr("data-analytics")); });
+
+
+        $(".adx-share-sendeventtogoogle").each(function () {
+            //Link Items Found
+            var lEventData = $("#hdnQuerySendEventToGoogle").val();
+            $(this).attr("href", "http://www.google.com/calendar/event?action=TEMPLATE" + lEventData);
+
+        }).click(function () { TrackSyndicationClick($(this).attr("data-analytics")); });
+    }
+</script>
+<input type="hidden" name="ctl01$ctl00$ctl00$publicBody$siteBody$UCSyndication$hdnQueryParams" id="hdnQueryParams" value="startdate=7/1/2023&amp;enddate=7/31/2023&amp;keywords=&amp;category=&amp;location=" />
+<input type="hidden" name="ctl01$ctl00$ctl00$publicBody$siteBody$UCSyndication$hdnQuerySendEventToGoogle" id="hdnQuerySendEventToGoogle" value="keywords=&amp;sc=&amp;sl=" />
+<!--
+ADD THESE TO YOUR PAGE TO ENABLE FEED LINKS
+-------------------------------------------
+<a class="adx-share-link" data-sharetype="rss" data-analytics="RSS">RSS</a>
+<a class="adx-share-link" data-sharetype="ical" data-analytics="ICAL">iCal</a>
+<a class="adx-share-link" data-sharetype="csv" data-analytics="CSV">CSV</a>
+<a class="adx-share-link" data-sharetype="xml" data-analytics="XML">XML</a>
+<a class="adx-share-sendtogoogle" data-sharetype="ical" data-analytics="SendtoGoogle">Send to Google Calendar</a>
+<a class="adx-share-link" data-sharetype="print" data-analytics="Print">Print</a>
+-->
+
+
+    <!-- On Document Ready -->
+    <script>
+        $(function () {
+            //Application Gadgets
+            ActiveData.Gadgets.RegisterGadgets();
+        });
+    </script>
+
+    <!-- Required Application Element -->
+    
+
+
+
+
+        <!-- Layout Footer -->
+        <footer id="sitefooter">
+            <p>
+                <script type="text/javascript">document.write("Copyright " + new Date().getFullYear() + " ");</script>
+                <a href="https://www.brightlysoftware.com/privacy" target="_blank"><abbr class="footer-link" title="Brightly Software, Inc., link Opens in a new window">Brightly Software, Inc.</abbr> <i class="material-icons" aria-label="Link opens in a new window">launch</i></a></p>
+        </footer>
+    </div>
+
+    <!-- Application Gadget Manager -->
+    <div id="gadget" class="adx-modal">
+    <div class="adx-modal-inner">
+        <div class="adx-modal-canvas">
+            <div id="adx-modal-form" class="core-primary-container"></div>
+            <div id="adx-modal-submit" class="core-primary-container">
+                <div id="adx-modal-recaptcha" class="g-recaptcha" data-sitekey="6LfgZzMUAAAAAIhwoCK7yNalMZitMiQtFg6uDp3o" data-callback="captchaLabelCallback"></></div>
+                <div class="core-button-container">
+                    <a id="lbtnGadgetSubmit" class="core-button-submit" tabindex="0" href="#">Submit</a>
+                </div>
+                <div id="adx-modal-error"></div>
+            </div>
+            <input id="adx-modal-scroll-position" type="hidden" value="" />
+        </div>
+        <a class="adx-close-modal" href="#" title="Close">Close</a>
+    </div>
+</div>
+
+<script>
+    function captchaLabelCallback(response) {
+        var textAreaCheck = document.getElementsByClassName('g-recaptcha-response');
+        if (textAreaCheck.length > 0) {
+            $(textAreaCheck).attr('aria-labelledby', 'g-recaptcha-response');
+        }
+    }
+</script>
+
+    <!-- Footer Scripts -->
+    <script src="/Layouts/Community/Default Site/Active Data Default/js/site-scripts.js?ver=2019.06.25"></script>
+
+    <!-- Social Share -->
+    <script src="/Layouts/Community/Default Site/Active Data Default/js/sss.js?ver=2019.07.10"></script>
+    <script src="/Layouts/Community/Default Site/Active Data Default/js/share-it.js?ver=2016.4.0.6"></script>
+
+
+
+    </form>
+    
+    
+        <iframe tabindex="-1" src="https://survey.dudesolutions.com/transfer.html?remove=tenant&remove=user&remove=userPrivelege&remove=siteId" style="width: 1px; height: 1px; position: absolute; top: -1px; left: -1px;" aria-hidden="true"></iframe>
+    </body>
+</html>
