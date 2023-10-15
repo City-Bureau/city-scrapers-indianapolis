@@ -34,7 +34,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 class IndSchoolBoard(CityScrapersSpider):
     name = "ind_school_board"
     agency = "Indianapolis Public School Board"
-    timezone = "America/New_York"
+    timezone = "America/Detroit"
     start_urls = ["https://go.boarddocs.com/in/indps/Board.nsf/XML-ActiveMeetings"]
 
     def parse(self, response):
