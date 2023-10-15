@@ -7,7 +7,7 @@ from dateutil.parser import parser
 class IndIvyTechSpider(CityScrapersSpider):
     name = "ind_ivy_tech"
     agency = "Indianapolis Ivy Tech"
-    timezone = "America/Chicago"
+    timezone = "America/Detroit"
     start_urls = [
         "https://www.ivytech.edu/about-ivy-tech/college-operations/state-board-of-trustees/"  # noqa
     ]
