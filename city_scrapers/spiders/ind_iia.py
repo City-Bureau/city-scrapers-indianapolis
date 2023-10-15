@@ -7,7 +7,7 @@ from dateutil.parser import parser
 class IndIiaSpider(CityScrapersSpider):
     name = "ind_iia"
     agency = "Indianapolis International Airport Board"
-    timezone = "America/Chicago"
+    timezone = "America/Detroit"
     start_urls = ["https://www.ind.com/about/leadership/board-papers-documentation"]
 
     def parse(self, response):
