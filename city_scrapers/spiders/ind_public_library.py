@@ -7,7 +7,7 @@ from dateutil.parser import parser
 class IndPublicLibrarySpider(CityScrapersSpider):
     name = "ind_public_library"
     agency = "Indianapolis Public Library Board"
-    timezone = "America/Chicago"
+    timezone = "America/Detroit"
     start_urls = [
         "https://www.indypl.org/about-the-library/board-meeting-times-committees"
     ]
