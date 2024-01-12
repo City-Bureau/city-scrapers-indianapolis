@@ -1,3 +1,5 @@
+import datetime
+
 from city_scrapers_core.constants import BOARD
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import CityScrapersSpider
@@ -43,14 +45,7 @@ class IndIndygoServiceSpider(CityScrapersSpider):
 
     def _parse_description(self, item):
         """Parse or generate meeting description."""
-        string = item.css("::text").get()
-        string_split = string.split(" ")
-        if item.css("strong::text").get():
-            description = item.css("strong::text").get()
-        elif len(string_split) > 3:
-            description = string.split(" ", 3)[3]
-        else:
-            description = ""
+        description = ""
         return description
 
     def _parse_classification(self, item):
@@ -60,7 +55,7 @@ class IndIndygoServiceSpider(CityScrapersSpider):
     def _parse_start(self, item):
         """Parse start datetime as a naive datetime object."""
         string = item.css("::text").get()
-        start_date = string.split(" ")[1] + " " + string.split(" ")[2] + " 2023"
+        start_date = string + " " + str(datetime.date.today().year)
         start_time = "10:00:00"
         return parser().parse(start_date + " " + start_time)
 
