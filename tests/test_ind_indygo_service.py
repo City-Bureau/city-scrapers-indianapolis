@@ -90,7 +90,7 @@ def test_links():
 
 
 def test_classification():
-    assert parsed_items[0]["classification"] == None
+    assert parsed_items[0]["classification"] == None  # noqa
 
 
 @pytest.mark.parametrize("item", parsed_items)
