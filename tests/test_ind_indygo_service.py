@@ -48,10 +48,7 @@ def test_start():
 
 
 def test_time_notes():
-    assert (
-        parsed_items[0]["time_notes"]
-        == ""  # noqa
-    )  # noqa
+    assert parsed_items[0]["time_notes"] == ""  # noqa  # noqa
 
 
 def test_id():
