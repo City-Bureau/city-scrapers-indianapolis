@@ -40,7 +40,7 @@ def test_description():
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2023, 1, 19, 10, 0)
+    assert parsed_items[0]["start"] == datetime(2024, 1, 18, 10, 0)
 
 
 # def test_end():
@@ -50,19 +50,19 @@ def test_start():
 def test_time_notes():
     assert (
         parsed_items[0]["time_notes"]
-        == "Service Committee meetings are set for 10:00AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
+        == ""  # noqa
     )  # noqa
 
 
 def test_id():
     assert (
         parsed_items[0]["id"]
-        == "ind_indygo_service/202301191000/x/indygo_service_committee"  # noqa
+        == "ind_indygo_service/202401181000/x/indygo_service_committee"  # noqa
     )
 
 
 def test_status():
-    assert parsed_items[0]["status"] == "passed"
+    assert parsed_items[0]["status"] == "tentative"
 
 
 def test_location():

@@ -48,10 +48,7 @@ def test_start():
 
 
 def test_time_notes():
-    assert (
-        parsed_items[0]["time_notes"]
-        == "Board meetings are set for 8:30AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
-    )
+    assert parsed_items[0]["time_notes"] == ""  # noqa
 
 
 def test_id():
@@ -62,7 +59,7 @@ def test_id():
 
 
 def test_status():
-    assert parsed_items[0]["status"] == "passed"
+    assert parsed_items[0]["status"] == "tentative"
 
 
 def test_location():

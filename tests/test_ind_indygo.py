@@ -36,14 +36,11 @@ def test_title():
 
 
 def test_description():
-    assert (
-        parsed_items[0]["description"]
-        == "– Board of Finance Meeting following immediately after the Board of Directors meeting."  # noqa
-    )
+    assert parsed_items[0]["description"] == ""
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2023, 1, 26, 17, 0)
+    assert parsed_items[0]["start"] == datetime(2024, 1, 25, 11, 0)
 
 
 # def test_end():
@@ -51,18 +48,15 @@ def test_start():
 
 
 def test_time_notes():
-    assert (
-        parsed_items[0]["time_notes"]
-        == "Board meetings are set for 5:00PM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
-    )
+    assert parsed_items[0]["time_notes"] == ""  # noqa
 
 
 def test_id():
-    assert parsed_items[0]["id"] == "ind_indygo/202301261700/x/indygo_board"
+    assert parsed_items[0]["id"] == "ind_indygo/202401251100/x/indygo_board"
 
 
 def test_status():
-    assert parsed_items[0]["status"] == "passed"
+    assert parsed_items[0]["status"] == "tentative"
 
 
 def test_location():
