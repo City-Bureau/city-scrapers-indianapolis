@@ -46,7 +46,10 @@ class IndSchoolBoard(CityScrapersSpider):
         """
 
         for item in response.xpath("//meeting"):
-            if datetime.date.today().year in item.xpath("./start/date/text()").extract_first():
+            if (
+                datetime.date.today().year
+                in item.xpath("./start/date/text()").extract_first()
+            ):
                 agenda_url = item.xpath("./link/text()").extract_first()
                 links = []
                 if agenda_url:
