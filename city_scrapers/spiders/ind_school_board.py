@@ -53,7 +53,7 @@ class IndSchoolBoard(CityScrapersSpider):
             if agenda_url:
                 links = [{"title": "Agenda", "href": agenda_url}]
                 meeting = Meeting(
-                    title=self._parse_title(item),
+                    title="Indianapolis Public School Board",
                     description=self._parse_description(item),  # noqa
                     classification=self._parse_classification(item),
                     start=self._parse_start(item),
@@ -65,22 +65,17 @@ class IndSchoolBoard(CityScrapersSpider):
                     source=agenda_url or response.url,
                 )
 
-                # meeting["status"] = self._get_status(meeting)
-                meeting["status"] = 'passed'
+                meeting["status"] = self._get_status(meeting)
+                #meeting["status"] = 'passed'
                 meeting["id"] = self._get_id(meeting)
 
                 yield meeting
             else:
                 continue
 
-    def _parse_title(self, item):
-        """Parse or generate meeting title."""
-        title = "Indianapolis Public School Board"
-        return title
-
     def _parse_description(self, item):
         description = ""
-        if item.xpath("./description/text()").extract_first() != "":
+        if item.xpath("./description/text()").extract_first() != None:
             description = item.xpath("./description/text()").extract_first()
 
         return description
