@@ -24,11 +24,12 @@ class IndSchoolBoard(BoardDocsMixin, CityScrapersSpider):
 # https://github.com/City-Bureau/city-scrapers-cle/blob/105ed65078ab4f7ca54193cc54c8c52dc174d08b/city_scrapers/spiders/cle_metro_school_district.py#L13
 
 import re
-from datetime import datetime
+import datetime
 
 from city_scrapers_core.constants import BOARD, FORUM
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import CityScrapersSpider
+from dateutil.parser import parser
 
 
 class IndSchoolBoard(CityScrapersSpider):
@@ -46,17 +47,14 @@ class IndSchoolBoard(CityScrapersSpider):
         """
 
         for item in response.xpath("//meeting"):
-            if (
-                datetime.date.today().year
-                in item.xpath("./start/date/text()").extract_first()
-            ):
-                agenda_url = item.xpath("./link/text()").extract_first()
-                links = []
-                if agenda_url:
-                    links = [{"title": "Agenda", "href": agenda_url}]
+            agenda_url = item.xpath("./link/text()").extract_first()
+            links = []
+            description = item.xpath("./description/text()").extract_first()
+            if agenda_url:
+                links = [{"title": "Agenda", "href": agenda_url}]
                 meeting = Meeting(
                     title=self._parse_title(item),
-                    description="Please check website for meeting info. Contact Leslie-Ann James for questions (317-226-4418)",  # noqa
+                    description=description,  # noqa
                     classification=self._parse_classification(item),
                     start=self._parse_start(item),
                     end=None,
@@ -67,7 +65,8 @@ class IndSchoolBoard(CityScrapersSpider):
                     source=agenda_url or response.url,
                 )
 
-                meeting["status"] = self._get_status(meeting)
+                # meeting["status"] = self._get_status(meeting)
+                meeting["status"] = 'passed'
                 meeting["id"] = self._get_id(meeting)
 
                 yield meeting
@@ -90,12 +89,16 @@ class IndSchoolBoard(CityScrapersSpider):
         """Parse start datetime as a naive datetime object."""
 
         title_str = item.xpath("./name/text()").extract_first()
-        time_str = "12:00 AM"
         time_match = re.search(r"\d{1,2}:\d{1,2} *[APM\.]{2,4}", title_str)
         if time_match:
             time_str = time_match.group().replace(".", "")
-        date_str = item.xpath("./start/date/text()").extract_first()
-        return datetime.strptime(" ".join([date_str, time_str]), "%Y-%m-%d %I:%M %p")
+        else:
+            time_str = ""
+
+        date = item.xpath("./start/date/text()").extract_first()
+        
+        #return datetime.strptime(" ".join([date_str, time_str]), "%Y-%m-%d %I:%M %p")
+        return parser().parse(date + " " + time_str)
 
     def _parse_location(self, item):
         """Parse or generate location."""
