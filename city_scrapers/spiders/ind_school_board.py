@@ -49,7 +49,10 @@ class IndSchoolBoard(CityScrapersSpider):
         for item in response.xpath("//meeting"):
             agenda_url = item.xpath("./link/text()").extract_first()
             links = []
-            description = item.xpath("./description/text()").extract_first()
+            if item.xpath("./description/text()").extract_first() != "":
+                description = item.xpath("./description/text()").extract_first()
+            else:
+                description = ""
             if agenda_url:
                 links = [{"title": "Agenda", "href": agenda_url}]
                 meeting = Meeting(
@@ -93,7 +96,7 @@ class IndSchoolBoard(CityScrapersSpider):
         if time_match:
             time_str = time_match.group().replace(".", "")
         else:
-            time_str = ""
+            time_str = "00:00:00"
 
         date = item.xpath("./start/date/text()").extract_first()
         
