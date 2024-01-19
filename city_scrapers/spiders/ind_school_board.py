@@ -65,8 +65,8 @@ class IndSchoolBoard(CityScrapersSpider):
                     source=agenda_url or response.url,
                 )
 
-                meeting["status"] = self._get_status(meeting)
-                #meeting["status"] = 'passed'
+                # meeting["status"] = self._get_status(meeting)
+                meeting["status"] = 'passed'
                 meeting["id"] = self._get_id(meeting)
 
                 yield meeting
@@ -96,6 +96,7 @@ class IndSchoolBoard(CityScrapersSpider):
         """Parse start datetime as a naive datetime object."""
 
         title_str = item.xpath("./name/text()").extract_first()
+        print(title_str)
         time_match = re.search(r"\d{1,2}:\d{1,2} *[APM\.]{2,4}", title_str)
         if time_match:
             time_str = time_match.group().replace(".", "")
