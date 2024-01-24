@@ -50,7 +50,6 @@ class IndSchoolBoard(CityScrapersSpider):
             agenda_url = item.xpath("./link/text()").extract_first()
             links = []
             title = item.xpath("./name/text()").extract_first()
-            #date = item.xpath("./start/date/text()").extract_first()
             if agenda_url:
                 links = [{"title": "Agenda", "href": agenda_url}]
                 meeting = Meeting(
