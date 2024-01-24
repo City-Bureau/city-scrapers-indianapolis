@@ -2,7 +2,7 @@ from datetime import datetime
 from os.path import dirname, join
 
 import pytest
-from city_scrapers_core.constants import BOARD
+from city_scrapers_core.constants import BOARD, PASSED
 from city_scrapers_core.utils import file_response
 from freezegun import freeze_time
 
@@ -32,7 +32,7 @@ def test_tests():
 
 
 def test_title():
-    assert parsed_items[0]["title"] == "Indianapolis Public School Board"
+    assert parsed_items[0]["title"] == "Organizational Meeting"
 
 
 def test_description():
@@ -43,7 +43,7 @@ def test_description():
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2023, 1, 9, 0, 0)
+    assert parsed_items[0]["start"] == datetime(2013, 1, 7, 17, 30)
 
 
 # def test_end():
@@ -57,12 +57,12 @@ def test_time_notes():
 def test_id():
     assert (
         parsed_items[0]["id"]
-        == "ind_school_board/202301090000/x/indianapolis_public_school_board"
+        == "ind_school_board/201301071730/x/organizational_meeting"
     )
 
 
 def test_status():
-    assert parsed_items[0]["status"] == "passed"
+    assert parsed_items[0]["status"] == PASSED
 
 
 def test_location():
@@ -73,7 +73,7 @@ def test_location():
 
 
 def test_classification():
-    assert parsed_items[0]["classification"] == BOARD
+    assert parsed_items[1]["classification"] == BOARD
 
 
 @pytest.mark.parametrize("item", parsed_items)

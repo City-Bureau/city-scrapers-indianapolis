@@ -1,3 +1,4 @@
+from city_scrapers_core.constants import BOARD
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import CityScrapersSpider
 from dateutil.parser import parser
@@ -43,7 +44,7 @@ class IndIndygoServiceSpider(CityScrapersSpider):
             meeting = Meeting(
                 title="IndyGo Service Committee",
                 description="",
-                classification=None,
+                classification=BOARD,
                 start=self._parse_start(date_item, meeting_year, meeting_time),
                 end=None,
                 all_day=False,

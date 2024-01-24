@@ -49,14 +49,15 @@ class IndSchoolBoard(CityScrapersSpider):
         for item in response.xpath("//meeting"):
             agenda_url = item.xpath("./link/text()").extract_first()
             links = []
-            
+            title = item.xpath("./name/text()").extract_first()
+            #date = item.xpath("./start/date/text()").extract_first()
             if agenda_url:
                 links = [{"title": "Agenda", "href": agenda_url}]
                 meeting = Meeting(
-                    title="Indianapolis Public School Board",
-                    description=self._parse_description(item),  # noqa
-                    classification=self._parse_classification(item),
-                    start=self._parse_start(item),
+                    title=self._parse_title(item, title),
+                    description=self._parse_description(item),
+                    classification=self._parse_classification(item, title),
+                    start=self._parse_start(item, title),
                     end=None,
                     all_day=False,
                     time_notes="",
@@ -66,12 +67,15 @@ class IndSchoolBoard(CityScrapersSpider):
                 )
 
                 meeting["status"] = self._get_status(meeting)
-                #meeting["status"] = 'passed'
                 meeting["id"] = self._get_id(meeting)
 
                 yield meeting
             else:
                 continue
+
+    def _parse_title(self, item, title):
+        title = title.split("-")[0]
+        return title
 
     def _parse_description(self, item):
         description = ""
@@ -80,27 +84,23 @@ class IndSchoolBoard(CityScrapersSpider):
 
         return description
 
-    def _parse_classification(self, item):
+    def _parse_classification(self, item, title):
         """Parse or generate classification from allowed options."""
-        title_str = item.xpath("./name/text()").extract_first()
-        if "Community" in title_str:
+        if "Community" in title:
             return FORUM
         return BOARD
 
-    def _parse_start(self, item):
+    def _parse_start(self, item, title):
         """Parse start datetime as a naive datetime object."""
 
-        title_str = item.xpath("./name/text()").extract_first()
-        print(title_str)
-        time_match = re.search(r"\d{1,2}:\d{1,2} *[APM\.]{2,4}", title_str)
+        time_match = re.search(r"\d{1,2}:\d{1,2} *[APM\.]{2,4}", title)
         if time_match:
             time_str = time_match.group().replace(".", "")
         else:
-            time_str = "00:00:00"
+            time_str = "17:00:00"
 
         date = item.xpath("./start/date/text()").extract_first()
         
-        #return datetime.strptime(" ".join([date_str, time_str]), "%Y-%m-%d %I:%M %p")
         return parser().parse(date + " " + time_str)
 
     def _parse_location(self, item):

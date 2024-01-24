@@ -2,7 +2,7 @@ from datetime import datetime
 from os.path import dirname, join
 
 import pytest
-from city_scrapers_core.constants import BOARD  # noqa
+from city_scrapers_core.constants import BOARD, TENTATIVE
 from city_scrapers_core.utils import file_response
 from freezegun import freeze_time
 
@@ -43,12 +43,12 @@ def test_start():
     assert parsed_items[0]["start"] == datetime(2024, 1, 18, 10, 0)
 
 
-# def test_end():
-#     assert parsed_items[0]["end"] == datetime(2019, 1, 1, 0, 0)
+def test_end():
+    assert parsed_items[0]["end"] == None
 
 
 def test_time_notes():
-    assert parsed_items[0]["time_notes"] == ""  # noqa  # noqa
+    assert parsed_items[0]["time_notes"] == ""
 
 
 def test_id():
@@ -59,7 +59,7 @@ def test_id():
 
 
 def test_status():
-    assert parsed_items[0]["status"] == "tentative"
+    assert parsed_items[0]["status"] == TENTATIVE
 
 
 def test_location():
@@ -90,7 +90,7 @@ def test_links():
 
 
 def test_classification():
-    assert parsed_items[0]["classification"] == None  # noqa
+    assert parsed_items[0]["classification"] == BOARD
 
 
 @pytest.mark.parametrize("item", parsed_items)

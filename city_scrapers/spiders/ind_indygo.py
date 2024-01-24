@@ -36,7 +36,6 @@ class IndIndygoSpider(CityScrapersSpider):
             .split("EST")[0]
             .strip()
         )
-        print(meeting_time)
 
         for date_item in meeting_section.css("ul li"):
             meeting = Meeting(
