@@ -73,7 +73,7 @@ def test_location():
 
 
 def test_classification():
-    assert parsed_items[1]["classification"] == BOARD
+    assert parsed_items[0]["classification"] == BOARD
 
 
 @pytest.mark.parametrize("item", parsed_items)
