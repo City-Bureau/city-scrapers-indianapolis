@@ -43,12 +43,12 @@ def test_start():
     assert parsed_items[0]["start"] == datetime(2024, 1, 25, 11, 0)
 
 
-# def test_end():
-#     assert parsed_items[0]["end"] == datetime(2019, 1, 1, 0, 0)
+def test_end():
+    assert parsed_items[0]["end"] is None
 
 
 def test_time_notes():
-    assert parsed_items[0]["time_notes"] == ""  # noqa
+    assert parsed_items[0]["time_notes"] == ""
 
 
 def test_id():
