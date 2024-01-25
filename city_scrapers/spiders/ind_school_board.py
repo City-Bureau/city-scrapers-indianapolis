@@ -24,7 +24,6 @@ class IndSchoolBoard(BoardDocsMixin, CityScrapersSpider):
 # https://github.com/City-Bureau/city-scrapers-cle/blob/105ed65078ab4f7ca54193cc54c8c52dc174d08b/city_scrapers/spiders/cle_metro_school_district.py#L13
 
 import re
-import datetime
 
 from city_scrapers_core.constants import BOARD, FORUM
 from city_scrapers_core.items import Meeting
@@ -50,27 +49,25 @@ class IndSchoolBoard(CityScrapersSpider):
             agenda_url = item.xpath("./link/text()").extract_first()
             links = []
             title = item.xpath("./name/text()").extract_first()
-            if agenda_url:
-                links = [{"title": "Agenda", "href": agenda_url}]
-                meeting = Meeting(
-                    title=self._parse_title(item, title),
-                    description=self._parse_description(item),
-                    classification=self._parse_classification(item, title),
-                    start=self._parse_start(item, title),
-                    end=None,
-                    all_day=False,
-                    time_notes="",
-                    location=self._parse_location(item),
-                    links=links,
-                    source=agenda_url or response.url,
-                )
 
-                meeting["status"] = self._get_status(meeting)
-                meeting["id"] = self._get_id(meeting)
+            links = [{"title": "Agenda", "href": agenda_url}]
+            meeting = Meeting(
+                title=self._parse_title(item, title),
+                description=self._parse_description(item),
+                classification=self._parse_classification(item, title),
+                start=self._parse_start(item, title),
+                end=None,
+                all_day=False,
+                time_notes="",
+                location=self._parse_location(item),
+                links=links,
+                source=agenda_url or response.url,
+            )
 
-                yield meeting
-            else:
-                continue
+            meeting["status"] = self._get_status(meeting)
+            meeting["id"] = self._get_id(meeting)
+
+            yield meeting
 
     def _parse_title(self, item, title):
         title = title.split("-")[0]
@@ -78,7 +75,7 @@ class IndSchoolBoard(CityScrapersSpider):
 
     def _parse_description(self, item):
         description = ""
-        if item.xpath("./description/text()").extract_first() != None:
+        if item.xpath("./description/text()").extract_first() is not None:
             description = item.xpath("./description/text()").extract_first()
 
         return description
@@ -99,7 +96,7 @@ class IndSchoolBoard(CityScrapersSpider):
             time_str = "17:00:00"
 
         date = item.xpath("./start/date/text()").extract_first()
-        
+
         return parser().parse(date + " " + time_str)
 
     def _parse_location(self, item):

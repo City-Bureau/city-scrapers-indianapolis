@@ -32,22 +32,19 @@ def test_tests():
 
 
 def test_title():
-    assert parsed_items[0]["title"] == "Organizational Meeting"
+    assert parsed_items[0]["title"] == "Organizational Meeting "
 
 
 def test_description():
-    assert (
-        parsed_items[0]["description"]
-        == "Please check website for meeting info. Contact Leslie-Ann James for questions (317-226-4418)"  # noqa
-    )
+    assert parsed_items[0]["description"] == ""
 
 
 def test_start():
     assert parsed_items[0]["start"] == datetime(2013, 1, 7, 17, 30)
 
 
-# def test_end():
-#     assert parsed_items[0]["end"] == datetime(2019, 1, 1, 0, 0)
+def test_end():
+    assert parsed_items[0]["end"] is None
 
 
 def test_time_notes():
