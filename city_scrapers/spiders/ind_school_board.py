@@ -19,6 +19,7 @@ class IndSchoolBoard(BoardDocsMixin, CityScrapersSpider):
         print(item)
 
 """
+
 # Here is board docs page scraped using an alternative method demonstrated here.
 # Advantage is this method has the agenda link:
 # https://github.com/City-Bureau/city-scrapers-cle/blob/105ed65078ab4f7ca54193cc54c8c52dc174d08b/city_scrapers/spiders/cle_metro_school_district.py#L13
