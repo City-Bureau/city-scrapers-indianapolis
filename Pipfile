@@ -5,11 +5,10 @@ name = "pypi"
 
 [packages]
 scrapy = "*"
-scrapy-sentry = "*"
-city-scrapers-core = {extras = ["azure"], version = "*"}
-pypiwin32 = {version = "*", sys_platform = "== 'win32'"}
+city-scrapers-core = {ref = "main", git = "https://github.com/City-Bureau/city-scrapers-core.git", extras = ["azure"]}
 scrapy-wayback-middleware = "*"
 python-dateutil = "*"
+scrapy-sentry-errors = "1.0.0"
 
 [dev-packages]
 freezegun = "*"
@@ -17,3 +16,6 @@ pytest = "*"
 "flake8" = "*"
 isort = "*"
 black = "*"
+
+[requires]
+python_version = "3.9"
