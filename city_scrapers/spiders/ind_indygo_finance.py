@@ -35,7 +35,8 @@ class IndIndygoFinanceSpider(CityScrapersSpider):
         section_title = meeting_section.css("h2::text").get()
         meeting_year = section_title.split(" ")[0]
         meeting_time = (
-            (response.css(".content-section:nth-child(6) p strong::text").get())
+            response.css(".content-section:nth-child(6) p strong::text")
+            .get()
             .split(":", 1)[1]
             .strip()
         )
