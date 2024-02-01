@@ -9,6 +9,20 @@ class IndIndygoServiceSpider(CityScrapersSpider):
     agency = "Indianapolis Indygo Service Committee"
     timezone = "America/Detroit"
     start_urls = ["https://www.indygo.net/about-indygo/board-of-directors/"]
+    location = {
+        "name": "Administrative Office - Board Room",
+        "address": "1501 W. Washington St. Indianapolis, IN 46222",
+    }
+    links = [
+        {
+            "href": "https://www.indygo.net/about-indygo/board-of-directors/",
+            "title": "Meeting Page",
+        },
+        {
+            "href": "https://public.onboardmeetings.com/Group/HrdLpC4rmFdYrgplGJZm82TtkS14OCvw7QLcFFPpPrIA/DlKdtulEaT4W%2Ff8DW40PxbNtxqyNp0cvwZNmbbcilaQA",  # noqa
+            "title": "Past Service Committee packets",
+        },
+    ]
 
     def parse(self, response):
         """
@@ -17,18 +31,28 @@ class IndIndygoServiceSpider(CityScrapersSpider):
         Change the `_parse_title`, `_parse_start`, etc methods to fit your scraping
         needs.
         """
-        for item in response.css(".content-section:nth-child(7) ul li"):
+        meeting_section = response.css(".content-section:nth-child(7)")
+        section_title = meeting_section.css("h2::text").get()
+        meeting_year = section_title.split(" ")[0]
+        meeting_time = (
+            response.css(".content-section:nth-child(7) p strong::text")
+            .get()
+            .split(":", 1)[1]
+            .strip()
+        )
+
+        for date_item in meeting_section.css("ul li"):
             meeting = Meeting(
-                title=self._parse_title(item),
-                description=self._parse_description(item),
-                classification=self._parse_classification(item),
-                start=self._parse_start(item),
-                end=self._parse_end(item),
-                all_day=self._parse_all_day(item),
-                time_notes=self._parse_time_notes(item),
-                location=self._parse_location(item),
-                links=self._parse_links(item),
-                source=self._parse_source(response),
+                title="IndyGo Service Committee",
+                description="",
+                classification=BOARD,
+                start=self._parse_start(date_item, meeting_year, meeting_time),
+                end=None,
+                all_day=False,
+                time_notes="",
+                location=self.location,
+                links=self.links,
+                source=response.url,
             )
 
             meeting["status"] = self._get_status(meeting)
@@ -36,66 +60,7 @@ class IndIndygoServiceSpider(CityScrapersSpider):
 
             yield meeting
 
-    def _parse_title(self, item):
-        """Parse or generate meeting title."""
-        title = "IndyGo Service Committee"
-        return title
-
-    def _parse_description(self, item):
-        """Parse or generate meeting description."""
-        string = item.css("::text").get()
-        string_split = string.split(" ")
-        if item.css("strong::text").get():
-            description = item.css("strong::text").get()
-        elif len(string_split) > 3:
-            description = string.split(" ", 3)[3]
-        else:
-            description = ""
-        return description
-
-    def _parse_classification(self, item):
-        """Parse or generate classification from allowed options."""
-        return BOARD
-
-    def _parse_start(self, item):
+    def _parse_start(self, date_item, meeting_year, meeting_time):
         """Parse start datetime as a naive datetime object."""
-        string = item.css("::text").get()
-        start_date = string.split(" ")[1] + " " + string.split(" ")[2] + " 2023"
-        start_time = "10:00:00"
-        return parser().parse(start_date + " " + start_time)
-
-    def _parse_end(self, item):
-        """Parse end datetime as a naive datetime object. Added by pipeline if None"""
-        return None
-
-    def _parse_time_notes(self, item):
-        """Parse any additional notes on the timing of the meeting"""
-        return "Service Committee meetings are set for 10:00AM unless otherwise noted in meeting description. Please double check the website before the meeting date."  # noqa
-
-    def _parse_all_day(self, item):
-        """Parse or generate all-day status. Defaults to False."""
-        return False
-
-    def _parse_location(self, item):
-        """Parse or generate location."""
-        return {
-            "address": "1501 W. Washington St. Indianapolis, IN 46222",
-            "name": "Administrative Office - Board Room",
-        }
-
-    def _parse_links(self, item):
-        """Parse or generate links."""
-        return [
-            {
-                "href": "https://www.indygo.net/about-indygo/board-of-directors/",
-                "title": "Meeting Page",
-            },
-            {
-                "href": "https://public.onboardmeetings.com/Group/HrdLpC4rmFdYrgplGJZm82TtkS14OCvw7QLcFFPpPrIA/DlKdtulEaT4W%2Ff8DW40PxbNtxqyNp0cvwZNmbbcilaQA",  # noqa
-                "title": "Past Service Committee packets",
-            },
-        ]
-
-    def _parse_source(self, response):
-        """Parse or generate source."""
-        return response.url
+        meeting_date = (date_item.css("::text").get()).split("-")[0]
+        return parser().parse(meeting_date + " " + meeting_year + " " + meeting_time)
