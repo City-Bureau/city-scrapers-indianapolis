@@ -38,7 +38,7 @@ class IndSchoolBoard(CityScrapersSpider):
     timezone = "America/Detroit"
     start_urls = ["https://go.boarddocs.com/in/indps/Board.nsf/XML-ActiveMeetings"]
     custom_settings = {"ROBOTSTXT_OBEY": False}
-    
+
     def parse(self, response):
         """
         `parse` should always `yield` Meeting items.
