@@ -24,7 +24,7 @@ env:
   # GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
   # GCS_BUCKET = os.getenv("GCS_BUCKET")
   # Setup Sentry, add the DSN to secrets and uncomment here
-  # SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
 jobs:
   crawl:
