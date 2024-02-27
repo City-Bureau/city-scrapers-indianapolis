@@ -9,6 +9,7 @@ city-scrapers-core = {ref = "main", git = "https://github.com/City-Bureau/city-s
 scrapy-wayback-middleware = "*"
 python-dateutil = "*"
 scrapy-sentry-errors = "1.0.0"
+pytz = "*"
 
 [dev-packages]
 freezegun = "*"

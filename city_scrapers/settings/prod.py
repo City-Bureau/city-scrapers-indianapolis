@@ -31,7 +31,7 @@ EXTENSIONS = {
     "city_scrapers_core.extensions.AzureBlobStatusExtension": 100,
     # "city_scrapers_core.extensions.S3StatusExtension": 100,
     # "city_scrapers_core.extensions.GCSStatusExtension": 100,
-    "scrapy_sentry.extensions.Errors": 10,
+    "scrapy_sentry_errors.extensions.Errors": 10,
     "scrapy.extensions.closespider.CloseSpider": None,
 }
 
@@ -61,7 +61,7 @@ FEED_STORAGES = {
 AZURE_ACCOUNT_NAME = os.getenv("AZURE_ACCOUNT_NAME")
 AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
 AZURE_CONTAINER = os.getenv("AZURE_CONTAINER")
-CITY_SCRAPERS_STATUS_CONTAINER = AZURE_CONTAINER
+CITY_SCRAPERS_STATUS_CONTAINER = os.getenv("AZURE_STATUS_CONTAINER")
 
 # GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 # GCS_BUCKET = os.getenv("GCS_BUCKET")
