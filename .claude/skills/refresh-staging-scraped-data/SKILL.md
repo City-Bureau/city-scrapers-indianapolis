@@ -401,10 +401,26 @@ came back empty, say so plainly rather than reporting a clean refresh.
 
 ## Known trip hazards in this repo
 
-- **Scheduled workflows currently fail at startup.** `cron.yml` has produced no
-  runs since 2026-07-08 and now records `startup_failure` twice daily, so the
-  production Indianapolis feed is stale and `staging.yml` deliberately has no
-  `schedule` trigger yet.
+- **Scheduled workflows currently fail at startup, so the production feed is
+  stale.** `cron.yml` and `archive.yml` have produced no real runs since
+  2026-07-08. Their `schedule` triggers were orphaned onto a phantom workflow
+  object (`state: deleted`, `path: BuildFailed`, empty name — id `309837371`,
+  created 2026-07-09) that fires twice daily and fails instantly, while the real
+  workflows still report `state: active` and receive nothing. A per-workflow run
+  query returns zero rows, which makes it look like the schedule simply stopped.
+
+  It correlates exactly with the `workflow-keepalive` job: all three scheduled
+  workflows in the org carrying `liskin/gh-workflow-keepalive` broke inside the
+  same 24-hour window (this repo's cron.yml and archive.yml, and
+  city-scrapers-colgo's staging.yml), and the two without it have run daily ever
+  since. The action's whole job is to `PUT .../workflows/<id>/enable` on itself
+  from inside a scheduled run, which is the plausible mechanism, though that step
+  is inferred rather than proven.
+
+  Fix is to drop the keepalive job *and* rename the workflow file in the same
+  commit, so GitHub allocates a fresh workflow id and re-registers the cron.
+  Push/`workflow_dispatch` runs are unaffected, which is why `staging.yml` uses
+  those and carries no keepalive job.
 - **The production feed has zero-byte spiders.** `ind_indygo*.json` and
   `ind_public_library.json` were 0 bytes as of 2026-07-08, which is what the
   scraper-fix PRs are addressing. Expect a large jump in meeting counts.

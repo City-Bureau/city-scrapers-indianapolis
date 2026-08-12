@@ -3,6 +3,14 @@ name: Staging
 # Crawls every spider on the `staging` branch and writes the feed to the staging
 # Azure container (AZURE_STAGING_CONTAINER), which the staging Documenters site
 # imports from. It never touches the production container used by `cron.yml`.
+#
+# Deliberately no `schedule:` trigger and no `workflow-keepalive` job. Every
+# scheduled workflow in this org that carries `liskin/gh-workflow-keepalive`
+# (this repo's cron.yml and archive.yml, and city-scrapers-colgo's staging.yml)
+# had its schedule trigger orphaned onto a phantom workflow object on
+# 2026-07-08/09 and has fired `startup_failure` twice daily since; the two
+# scheduled workflows without it have run every day. Adding a nightly staging
+# refresh is a follow-up, and must not reintroduce the keepalive job.
 on:
   push:
     branches:
