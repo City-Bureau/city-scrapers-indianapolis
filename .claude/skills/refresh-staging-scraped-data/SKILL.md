@@ -233,28 +233,69 @@ scraper, not a successful refresh — report it instead of proceeding.
 
 ## Step 6 — Reset the program's meetings on staging
 
-Delete only meetings **without assignments**, so Documenter assignments and the
+Delete stale rows so the import cannot leave orphans behind. Two constraints,
+both of which the naive "delete every meeting in this program" version violates:
+
+**Only delete meetings the feed will actually re-create.** A program's meetings
+usually come from more than one scraper generation. Indianapolis on staging has
+three, distinguished by the prefix of `scraper_id`
+(`<spider_name>/<YYYYMMDDHHMM>/x/<slug>`):
+
+| prefix | source | re-created by this feed? |
+| --- | --- | --- |
+| `ind_*` | this repo's current spiders | yes |
+| `indianapolis_*` | older generation of scrapers | **no** |
+| `reworkd` | Reworkd AI scrapers | **no** |
+
+Deleting a `reworkd` or `indianapolis_*` row destroys it permanently: nothing in
+`latest.json` will bring it back. So scope the delete to the spider names the
+crawl actually produced. Get that list from the repo, not from memory:
+
+```bash
+pipenv run scrapy list | sort
+```
+
+**Only delete meetings without assignments**, so Documenter assignments and the
 work attached to them survive.
+
+Check first, delete second. Confirm the counts look sane before running the
+delete:
 
 ```bash
 heroku run -a documenters-stg --no-tty -- python manage.py shell <<'EOF'
 from documenters.meetings.models import Meeting
 
 SLUG = "indianapolis"
+# The spider names `scrapy list` printed. Keep this explicit: a LIKE 'ind_%'
+# pattern would ALSO match indianapolis_* rows, because _ is a single-character
+# wildcard in SQL.
+SPIDERS = [
+    "ind_city_county", "ind_iia", "ind_indygo", "ind_indygo_finance",
+    "ind_indygo_gov_audit", "ind_indygo_service", "ind_public_library",
+    "ind_school_board",
+]
+prefixes = [f"{name}/" for name in SPIDERS]
+
 qs = Meeting.objects.filter(programs__slug=SLUG)
-total = qs.count()
-keep = qs.filter(assignments__isnull=False).distinct().count()
-drop = qs.filter(assignments__isnull=True).distinct()
-print(f"total={total} with_assignments={keep} without_assignments={drop.count()}")
-deleted, _ = drop.delete()
-print(f"deleted={deleted}")
+mine = qs.none()
+for p in prefixes:
+    mine = mine | qs.filter(scraper_id__startswith=p)
+mine = mine.distinct()
+
+drop = mine.filter(assignments__isnull=True).distinct()
+print(f"program_total={qs.count()} from_these_spiders={mine.count()}")
+print(f"  will_delete={drop.count()} kept_for_assignments={mine.count() - drop.count()}")
+print(f"  untouched_other_generations={qs.count() - mine.count()}")
 EOF
 ```
 
-Report the three counts before and the deleted count after. If
-`with_assignments` is large and unexpected, stop and ask: those rows will keep
-their old scraped values and can look like duplicates next to freshly imported
-meetings.
+Report those numbers, get confirmation, then delete by swapping the last line for
+`deleted, _ = drop.delete(); print(f"deleted={deleted}")`.
+
+The rows from other generations stay behind and can read as near-duplicates next
+to freshly imported meetings. That is usually acceptable because they are all in
+the past while CB reviews upcoming meetings. Say so in the handoff rather than
+deleting them to make the list look tidy.
 
 ## Step 7 — Point the program at the staging feed and import
 
