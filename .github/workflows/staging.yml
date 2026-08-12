@@ -15,6 +15,12 @@ on:
   push:
     branches:
       - staging
+    # A full crawl takes ~20-30 minutes, so don't spend one on a docs or
+    # skills-only commit.
+    paths-ignore:
+      - "**.md"
+      - ".claude/**"
+      - "LICENSE"
   workflow_dispatch:
 
 env:
