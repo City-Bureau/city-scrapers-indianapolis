@@ -22,7 +22,7 @@ class IndPublicLibrarySpider(CityScrapersSpider):
         "ROBOTSTXT_OBEY": False,
     }
 
-    DEFAULT_TIME = time(18, 30)
+    DEFAULT_TIME = time(18, 30)  # the usual 6:30pm start; see TIME_NOTES
 
     DATE_RE = re.compile(r"[A-Z][a-z]+ \d{1,2},? \d{4}")
     MONTH_DAY_RE = re.compile(r"[A-Z][a-z]+ \d{1,2}")
