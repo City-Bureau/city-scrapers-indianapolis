@@ -12,7 +12,7 @@ from scrapy.selector import Selector
 
 class IndCpcbSpider(CityScrapersSpider):
     name = "ind_cpcb"
-    agency = "Indianapolis Citizens' Police Complaint Board"
+    agency = "Citizens' Police Complaint Board"
     timezone = "America/Indiana/Indianapolis"
     custom_settings = {"ROBOTSTXT_OBEY": False}
 
