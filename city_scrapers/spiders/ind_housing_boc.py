@@ -26,6 +26,8 @@ class IndHousingBocSpider(CityScrapersSpider):
     ADDRESS_RE = re.compile(
         r"\d{1,5}(?!\s*[APap][Mm]\b)\s+[A-Za-z0-9.,#\s]+?,\s*[A-Za-z\s]+,\s*[A-Z]{2}\s*\d{5}(?:-\d{4})?"  # noqa
     )
+    # Matches the archive pagination URL suffix (e.g. "/=desc/1")
+    ARCHIVE_PAGE_RE = re.compile(r"/=desc/(\d+)$")
 
     def start_requests(self):
         for url in self.start_urls:
@@ -59,16 +61,39 @@ class IndHousingBocSpider(CityScrapersSpider):
     def _parse_archive_list(self, response):
         """Follow each past-meeting link on the news-archives listing page,
         and continue on to the next archive page if one exists."""
-        for item in response.css("#listWithImages a.listItemWithImage"):
+        items = response.css("#listWithImages a.listItemWithImage")
+
+        page_match = self.ARCHIVE_PAGE_RE.search(response.url)
+        current_page = int(page_match.group(1)) if page_match else None
+
+        if not items:
+            if current_page is None or current_page == 1:
+                self.logger.warning(
+                    "No meeting links found on archive listing page %s — "
+                    "selector may be stale.",
+                    response.url,
+                )
+            return
+
+        for item in items:
             href = item.attrib.get("href")
             if href:
                 yield response.follow(href, callback=self.parse)
 
-        # The archive URL is paginated (.../=desc/1, .../=desc/2, ...).
-        # Follow a "next" link if the site exposes one; adjust the selector
-        next_href = response.css("a.next::attr(href), a[rel='next']::attr(href)").get()
-        if next_href:
-            yield response.follow(next_href, callback=self.parse_start)
+        # The archive URL encodes its page number directly (".../=desc/1",
+        # ".../=desc/2", ...). Since this page had results, request the next
+        # page number; if it comes back empty we'll stop there.
+        if page_match:
+            next_url = self.ARCHIVE_PAGE_RE.sub(
+                f"/=desc/{current_page + 1}", response.url
+            )
+            yield response.follow(next_url, callback=self.parse_start)
+        else:
+            self.logger.warning(
+                "Could not find a page number in archive URL %s — unable "
+                "to compute the next page.",
+                response.url,
+            )
 
     def parse(self, response):
         """
