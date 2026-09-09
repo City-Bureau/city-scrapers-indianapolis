@@ -10,7 +10,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 class IndHousingBocSpider(CityScrapersSpider):
     name = "ind_housing_boc"
     agency = "Indianapolis Housing Agency Board of Commissioners"
-    timezone = "America/Chicago"
+    timezone = "America/Detroit"
     start_urls = [
         "https://www.indyhousing.org/calendar",
         "https://www.indyhousing.org/news-archives/filters/"
