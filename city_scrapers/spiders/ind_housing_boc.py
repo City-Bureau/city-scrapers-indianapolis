@@ -163,7 +163,7 @@ class IndHousingBocSpider(CityScrapersSpider):
         raw_title = response.css("h1.ptitles::text").get() or response.css(
             "title::text"
         ).get("")
-        title = self._clean_title(raw_title)
+        title = self._strip_title_suffix(raw_title)
         no_meeting = self._no_meeting_flag(raw_title)
 
         start_date = None
@@ -209,7 +209,7 @@ class IndHousingBocSpider(CityScrapersSpider):
     def _parse_archive_detail(self, response):
         """Parse the past-meeting (news-archive) detail page template."""
         raw_title = response.css("h1.ptitles::text").get("")
-        title = self._clean_title(raw_title)
+        title = self._strip_title_suffix(raw_title)
         no_meeting = self._no_meeting_flag(raw_title)
 
         paragraphs = response.css(".css_hook_longtext p")
@@ -239,9 +239,9 @@ class IndHousingBocSpider(CityScrapersSpider):
             title, start, self._parse_location(address), no_meeting
         )
 
-    def _clean_title(self, raw_title):
-        """Strip trailing ' | <date>' and site-name suffixes from a title."""
-        return (raw_title or "").split("|")[0].strip()
+    def _strip_title_suffix(self, raw_title):
+        """Strip trailing ' | <date>' suffix, then apply core's cancelled/rescheduled cleanup."""  # noqa
+        return super()._clean_title((raw_title or "").split("|")[0].strip())
 
     def _parse_links(self, response, is_upcoming):
         """Parse or generate links.
