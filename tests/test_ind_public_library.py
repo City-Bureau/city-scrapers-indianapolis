@@ -62,7 +62,7 @@ def documents_data():
 @pytest.fixture(scope="module")
 def meetings_data():
     return file_response(
-        join(dirname(__file__), "files", "ind_public_library.html"),
+        join(dirname(__file__), "files", "ind_public_library1.html"),
         url=MAIN_URL,
     )
 
@@ -79,7 +79,7 @@ def parsed_items(spider, documents_data, meetings_data):
 
 
 def test_count(parsed_items):
-    assert len(parsed_items) == 42
+    assert len(parsed_items) == 43
 
 
 def test_title(parsed_items):
@@ -139,6 +139,11 @@ def test_links(parsed_items):
             "title": "(Rescheduled) Board Meeting Minutes",
         },
     ]
+
+
+def test_special_meeting_start(parsed_items):
+    special = [m for m in parsed_items if "Special" in m["title"]]
+    assert special[0]["start"] == datetime(2026, 8, 11, 10, 0)
 
 
 def test_classification(parsed_items):
