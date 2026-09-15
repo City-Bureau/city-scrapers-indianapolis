@@ -62,7 +62,7 @@ def documents_data():
 @pytest.fixture(scope="module")
 def meetings_data():
     return file_response(
-        join(dirname(__file__), "files", "ind_public_library1.html"),
+        join(dirname(__file__), "files", "ind_public_library.html"),
         url=MAIN_URL,
     )
 
