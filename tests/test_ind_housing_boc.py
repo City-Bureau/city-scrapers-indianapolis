@@ -2,7 +2,8 @@ from datetime import datetime
 from os.path import dirname, join
 
 import pytest
-from city_scrapers_core.constants import BOARD
+from city_scrapers_core.constants import BOARD, CANCELLED
+from city_scrapers_core.items import Meeting
 from city_scrapers_core.utils import file_response
 from freezegun import freeze_time
 
@@ -154,6 +155,18 @@ def test_archive_links(archive_items):
             "title": "Meeting Attachment",
         }
     ]
+
+
+# Test that cancelled meetings are correctly identified
+def test_cancelled_title_sets_status(spider):
+    raw = "BOC Meeting - Cancelled | 09/15/2026"
+    meeting = Meeting(
+        title=spider._strip_title_suffix(raw),
+        description="",
+        start=datetime(2026, 9, 15, 13, 0),
+    )
+    assert meeting["title"] == "BOC Meeting"
+    assert spider._get_status(meeting, text=raw) == CANCELLED
 
 
 def test_archive_classification(archive_items):

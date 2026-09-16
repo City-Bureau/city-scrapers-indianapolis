@@ -12,7 +12,8 @@ class IndHousingBocSpider(CityScrapersSpider):
     agency = "Indianapolis Housing Agency Board of Commissioners"
     timezone = "America/Detroit"
     start_urls = [
-        "https://www.indyhousing.org/calendar",
+        # Only start with the archive listing;
+        # the calendar will be triggered in spider_idle
         "https://www.indyhousing.org/news-archives/filters/"
         "Y2F0ZWdvcnl+MDY2MzcwMDA2MWFhMTFmMDk5OTlkOWNkYTk1YzExMjM=/=desc/1",
     ]
@@ -29,6 +30,29 @@ class IndHousingBocSpider(CityScrapersSpider):
     # Matches the archive pagination URL suffix (e.g. "/=desc/1")
     ARCHIVE_PAGE_RE = re.compile(r"/=desc/(\d+)$")
 
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        """Connect to spider_idle and initialize our set for archive dates."""
+        spider = super().from_crawler(crawler, *args, **kwargs)
+        spider.archive_datetimes = set()
+        # Add a signal handler to trigger the /calendar page after the
+        # /news-archives listing has been fully scraped.
+        crawler.signals.connect(spider.spider_idle, signal=scrapy.signals.spider_idle)
+        return spider
+
+    def spider_idle(self):
+        """Trigger the calendar crawl after all archive detail pages have been scraped."""  # noqa
+        self.crawler.signals.disconnect(
+            self.spider_idle, signal=scrapy.signals.spider_idle
+        )
+        self.crawler.engine.crawl(
+            scrapy.Request(
+                "https://www.indyhousing.org/calendar",
+                callback=self.parse_start,
+            ),
+        )
+        raise scrapy.exceptions.DontCloseSpider
+
     def start_requests(self):
         for url in self.start_urls:
             yield scrapy.Request(url, callback=self.parse_start)
@@ -37,7 +61,7 @@ class IndHousingBocSpider(CityScrapersSpider):
         """
         Entry point for both the upcoming-meetings calendar and the
         past-meetings archive listing. Each meeting link is followed to its
-        detail page, where the actual Meeting item is built and yielded.
+        detail page.
         """
         if response.css("#listItems"):
             yield from self._parse_upcoming_list(response)
@@ -117,6 +141,18 @@ class IndHousingBocSpider(CityScrapersSpider):
                 response.url,
             )
             return
+        meeting_dt = parsed["start"]
+
+        # If it's an archive meeting, save its date
+        if not is_upcoming:
+            self.archive_datetimes.add(meeting_dt)
+        # If it's an upcoming meeting and its date was already in archives, skip it!
+        elif meeting_dt in self.archive_datetimes:
+            self.logger.info(
+                "Skipping upcoming meeting on %s because an archive version exists.",
+                meeting_dt,
+            )
+            return
 
         meeting = Meeting(
             title=parsed["title"],
@@ -134,7 +170,7 @@ class IndHousingBocSpider(CityScrapersSpider):
         if parsed.get("no_meeting"):
             meeting["status"] = CANCELLED
         else:
-            meeting["status"] = self._get_status(meeting)
+            meeting["status"] = self._get_status(meeting, text=parsed["raw_title"])
         meeting["id"] = self._get_id(meeting)
 
         yield meeting
@@ -148,7 +184,7 @@ class IndHousingBocSpider(CityScrapersSpider):
         """Build the location dict shared by both templates."""
         return {"name": self.LOCATION_NAME, "address": address}
 
-    def _parse_meeting_fields(self, title, start, location, no_meeting):
+    def _parse_meeting_fields(self, title, start, location, no_meeting, raw_title):
         """Assemble the intermediate dict both detail parsers return, so
         `parse()` can build the Meeting the same way"""
         return {
@@ -156,6 +192,7 @@ class IndHousingBocSpider(CityScrapersSpider):
             "start": start,
             "location": location,
             "no_meeting": no_meeting,
+            "raw_title": raw_title,
         }
 
     def _parse_upcoming_detail(self, response):
@@ -203,7 +240,7 @@ class IndHousingBocSpider(CityScrapersSpider):
                 address = location_text.split("|", 1)[1].strip()
 
         return self._parse_meeting_fields(
-            title, start, self._parse_location(address), no_meeting
+            title, start, self._parse_location(address), no_meeting, raw_title
         )
 
     def _parse_archive_detail(self, response):
@@ -236,7 +273,7 @@ class IndHousingBocSpider(CityScrapersSpider):
                 address = addr_match.group(0).strip()
 
         return self._parse_meeting_fields(
-            title, start, self._parse_location(address), no_meeting
+            title, start, self._parse_location(address), no_meeting, raw_title
         )
 
     def _strip_title_suffix(self, raw_title):
