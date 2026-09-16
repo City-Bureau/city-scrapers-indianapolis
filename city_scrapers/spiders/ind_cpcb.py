@@ -1,18 +1,19 @@
 import json
 import re
+from datetime import time
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import scrapy
 from city_scrapers_core.constants import BOARD
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import CityScrapersSpider
-from dateutil.parser import parse
+from dateutil.parser import parse as dateutil_parser
 from scrapy.selector import Selector
 
 
 class IndCpcbSpider(CityScrapersSpider):
     name = "ind_cpcb"
-    agency = "Indianapolis Citizens' Police Complaint Board"
+    agency = "Citizens' Police Complaint Board"
     timezone = "America/Indiana/Indianapolis"
     custom_settings = {"ROBOTSTXT_OBEY": False}
 
@@ -20,16 +21,22 @@ class IndCpcbSpider(CityScrapersSpider):
     api_url = (
         "https://api-us-east-1-indy.graphcms.com/v2/ckp3xrh1i657g01xp53az2mv4/master"
     )
-    query = """query ($slug: String) {
-  activity(where: {slug: $slug}) {
-    title
-    description { markdown }
-    location { address1 address2 address3 city state zip }
-    agencies { location { address1 address2 address3 city state zip } }
-    accordions { title items { title description { html } } }
-  }
-}"""
+    query = """
+        query ($slug: String) {
+            activity(where: {slug: $slug}) {
+                title
+                description { markdown }
+                location { address1 address2 address3 city state zip }
+                agencies { location { address1 address2 address3 city state zip } }
+                accordions { title items { title description { html } } }
+            }
+        }
+    """
     date_re = re.compile(r"([A-Z][a-z]+ \d{1,2}), \d{4}")
+    time_re = re.compile(r"(\d{1,2}):(\d{2})\s*([ap])\.?m\.?", re.IGNORECASE)
+    time_note_suffix = (
+        "Please check the meeting notice attachment for start time details."
+    )
 
     def start_requests(self):
         yield scrapy.Request(
@@ -42,6 +49,7 @@ class IndCpcbSpider(CityScrapersSpider):
                     "variables": {"slug": "citizens-police-complaint-board"},
                 }
             ),
+            callback=self.parse,
         )
 
     def parse(self, response):
@@ -50,6 +58,7 @@ class IndCpcbSpider(CityScrapersSpider):
         title = self._parse_title(activity)
         location = self._parse_location(activity)
         time_notes = self._parse_time_notes(activity)
+        meeting_time = self._parse_meeting_time(activity)
 
         items = [
             item for accordion in activity["accordions"] for item in accordion["items"]
@@ -61,6 +70,11 @@ class IndCpcbSpider(CityScrapersSpider):
             # mistyped year in a date line
             year_match = re.search(r"\d{4}", item["title"])
             if not year_match:
+                self.logger.warning(
+                    "Could not find a year in accordion title %r; skipping items"
+                    " under it",
+                    item["title"],
+                )
                 continue
             year = year_match.group()
             body = Selector(text=item["description"]["html"])
@@ -76,7 +90,7 @@ class IndCpcbSpider(CityScrapersSpider):
                     title=title,
                     description="",
                     classification=BOARD,
-                    start=self._parse_start(match.group(1), year),
+                    start=self._parse_start(match.group(1), year, meeting_time),
                     end=None,
                     all_day=False,
                     time_notes=time_notes,
@@ -95,20 +109,41 @@ class IndCpcbSpider(CityScrapersSpider):
     def _parse_title(self, activity):
         return " ".join(activity["title"].split())
 
-    def _parse_start(self, month_day, year):
-        """The listed date at the 6 p.m. start named in the description."""
-        return parse(f"{month_day} {year}").replace(hour=18)
+    def _parse_start(self, month_day, year, meeting_time):
+        """The listed date combined with the meeting's usual start time."""
+        return dateutil_parser(f"{month_day} {year}").replace(
+            hour=meeting_time.hour, minute=meeting_time.minute
+        )
 
     def _parse_time_notes(self, activity):
-        """The sentence in the description that states the meeting frequency."""
-        return next(
+        """The sentence in the description that states the meeting time, plus
+        a standing reminder to check the notice since that sentence can go
+        stale."""
+        line = next(
             (
                 ln.strip()
                 for ln in activity["description"]["markdown"].splitlines()
-                if "6:00" in ln
+                if self.time_re.search(ln)
             ),
             "",
         )
+        return f"{line} {self.time_note_suffix}" if line else self.time_note_suffix
+
+    def _parse_meeting_time(self, activity):
+        """The meeting's usual start time, parsed out of the description;
+        defaults to midnight if the description doesn't state one."""
+        match = self.time_re.search(activity["description"]["markdown"])
+        if not match:
+            self.logger.warning(
+                "Could not find a meeting start time in the description;"
+                " defaulting to 00:00"
+            )
+            return time(0, 0)
+        hour, minute, meridiem = match.groups()
+        hour = int(hour) % 12
+        if meridiem.lower() == "p":
+            hour += 12
+        return time(hour, int(minute))
 
     def _parse_location(self, activity):
         """The activity has no location of its own; use the parent agency's."""
