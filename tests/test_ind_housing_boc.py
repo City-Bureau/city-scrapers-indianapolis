@@ -12,7 +12,9 @@ from city_scrapers.spiders.ind_housing_boc import IndHousingBocSpider
 
 @pytest.fixture
 def spider():
-    return IndHousingBocSpider()
+    spider = IndHousingBocSpider()
+    spider.archive_datetimes = set()
+    return spider
 
 
 @pytest.fixture
