@@ -111,9 +111,7 @@ class IndCpcbSpider(CityScrapersSpider):
 
     def _parse_start(self, month_day, year, meeting_time):
         """The listed date combined with the meeting's usual start time."""
-        return dateutil_parser(f"{month_day} {year}").replace(
-            hour=meeting_time.hour, minute=meeting_time.minute
-        )
+        return dateutil_parser(f"{month_day} {year} {meeting_time}")
 
     def _parse_time_notes(self, activity):
         """The sentence in the description that states the meeting time, plus
