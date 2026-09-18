@@ -139,11 +139,7 @@ class IndCpcbSpider(CityScrapersSpider):
                 " defaulting to 00:00"
             )
             return time(0, 0)
-        hour, minute, meridiem = match.groups()
-        hour = int(hour) % 12
-        if meridiem.lower() == "p":
-            hour += 12
-        return time(hour, int(minute))
+        return match.group(0)
 
     def _parse_location(self, activity):
         """The activity has no location of its own; use the parent agency's."""
