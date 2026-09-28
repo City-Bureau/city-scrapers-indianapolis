@@ -18,30 +18,6 @@ spider_configs = [
                 "title": "Live Stream",
             },
         ],
-        # indygo.net's board page only shows the current year, so 2024 and
-        # 2025 are backfilled from Wayback snapshots below -- a one-time
-        # backfill, not annual upkeep: 2027+ comes from the live page.
-        "historical_snapshots": [
-            {
-                # Dec 2025, after indygo.net's Oct 2025 redesign -- same
-                # page design as today, so parses like the live page.
-                "url": (
-                    "https://web.archive.org/web/20251211205320/"
-                    "https://www.indygo.net/about-indygo/board-of-directors/"
-                ),
-                "design": "new",
-            },
-            {
-                # Dec 2024, before the redesign -- old page design, needs
-                # `_parse_old_design_schedule_snapshot`. Late in the year,
-                # so its schedule and Board Reports are both complete.
-                "url": (
-                    "https://web.archive.org/web/20241227050537/"
-                    "https://www.indygo.net/about-indygo/board-of-directors/"
-                ),
-                "design": "old",
-            },
-        ],
     },
     {
         "class_name": "IndIndygoFinanceSpider",
