@@ -30,12 +30,11 @@ spider_configs = [
                     "https://www.indygo.net/about-indygo/board-of-directors/"
                 ),
                 "design": "new",
-                "container_selector": ".rc-layout-content.rc-text-large",
             },
             {
                 # Dec 2024, before the redesign -- old page design, needs
-                # `_parse_old_design_section`. Late in the year, so its
-                # schedule and Board Reports are both already complete.
+                # `_parse_old_design_schedule_snapshot`. Late in the year,
+                # so its schedule and Board Reports are both complete.
                 "url": (
                     "https://web.archive.org/web/20241227050537/"
                     "https://www.indygo.net/about-indygo/board-of-directors/"

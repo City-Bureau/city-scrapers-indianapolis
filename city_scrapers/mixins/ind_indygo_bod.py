@@ -25,7 +25,6 @@ class IndIndygoBodSpiderMeta(type):
                 "name",
                 "title",
                 "section_heading_match",
-                "agency_name",
             ]
 
             missing_vars = [
@@ -59,8 +58,6 @@ class IndIndygoBodSpiderMixin(
     classification = BOARD
     section_heading_match = None
     links = []
-    location = {"name": "", "address": ""}
-    time_notes = ""
 
     _FALLBACK_TIME_NOTES = "Check meeting attachments for a more accurate location."
 
@@ -72,7 +69,7 @@ class IndIndygoBodSpiderMixin(
     _FACEBOOK_LINK_RE = re.compile(r"^https?://(www\.)?(facebook\.com|fb\.watch)/")
 
     #: Catches broken `href`s where an editor pasted the link text itself
-    #: (e.g. "http://Finance Committee Meeting") instead of a real URL --
+    #: (e.g. "http://Finance Committee Meeting") instead of a real URL -
     #: no real URL contains a literal space.
     _MALFORMED_HREF_RE = re.compile(r"\s")
 
@@ -97,23 +94,26 @@ class IndIndygoBodSpiderMixin(
         "December",
     )
 
-    schedule_container_selector = ".rc-layout-content.rc-text-lg"
+    #: Strips the parts of a section heading editors tend to vary - the
+    #: year, "&" vs "and", case, punctuation - so "2026 Governance and
+    #: Audit Committee" and "Governance & Audit Committee" compare equal.
+    _HEADING_NORMALIZE_RE = re.compile(r"\band\b|[^a-z ]")
 
     #: Extra `?year=<meeting_year + offset>` requests against a committee's
     #: OnBoard listings page. Each such response always includes the
     #: requested year plus the year before it, so offset -1 sweeps up
     #: `meeting_year - 1` and `- 2`, and offset +1 sweeps up
-    #: `meeting_year + 1` -- net effect: 2 years back, 1 forward.
+    #: `meeting_year + 1` - net effect: 2 years back, 1 forward.
     _EXTRA_LISTING_YEAR_OFFSETS = (-1, 1)
 
     #: Wayback Machine snapshots backfilling years the live board page no
     #: longer shows (it only ever displays the current year). Only the
-    #: Board spider uses this -- committees backfill via OnBoard's
+    #: Board spider uses this - committees backfill via OnBoard's
     #: `?year=` instead (see `_EXTRA_LISTING_YEAR_OFFSETS`). One-time
     #: backfill for 2024-2025; 2027+ will come from the live page.
     historical_snapshots = []
 
-    timezone = "America/Detroit"
+    timezone = "America/Indiana/Indianapolis"
 
     start_urls = ["https://www.indygo.net/about-indygo/board-of-directors/"]
 
@@ -121,7 +121,7 @@ class IndIndygoBodSpiderMixin(
 
     def parse(self, response):
         """Parse this spider's section, then backfill any `historical_snapshots`."""
-        yield from self._parse_schedule_page(response, self.schedule_container_selector)
+        yield from self._parse_schedule_page(response)
 
         for snapshot in self.historical_snapshots:
             if snapshot.get("design") == "old":
@@ -132,33 +132,32 @@ class IndIndygoBodSpiderMixin(
                 )
             else:
                 yield scrapy.Request(
-                    snapshot["url"],
-                    callback=self._parse_historical_snapshot,
-                    cb_kwargs={
-                        "container_selector": snapshot.get("container_selector")
-                    },
+                    snapshot["url"], callback=self._parse_schedule_page
                 )
 
-    def _parse_schedule_page(self, response, container_selector):
+    def _parse_schedule_page(self, response):
         """Parse meetings from a board page's schedule section."""
-        self.location, self.time_notes = self._parse_location_and_time_notes(response)
+        # Passed down through cb_kwargs rather than stored on `self`: live
+        # page and snapshot chains run concurrently, so spider-wide state
+        # would let one response's location leak onto another's meetings.
+        venue = self._parse_location_and_time_notes(response)
 
-        container = response.css(container_selector)
-
-        if not container:
+        heading = self._find_section_heading(response)
+        if heading is None:
             self.logger.warning(
-                "Could not find the schedule container using selector %s",
-                container_selector,
+                "Could not find a section heading matching %r for %s",
+                self.section_heading_match,
+                self.agency,
             )
             return
 
         meeting_year, raw_meeting_time, dates_list, listings_href = self._parse_section(
-            container[0]
+            heading, response
         )
 
         if meeting_year is None:
             self.logger.warning(
-                "Could not find a section heading matching %r for %s",
+                "Could not find a meeting year in the %r section for %s",
                 self.section_heading_match,
                 self.agency,
             )
@@ -180,14 +179,7 @@ class IndIndygoBodSpiderMixin(
 
         meeting_time = self._parse_meeting_time(raw_meeting_time)
 
-        starts = [
-            (
-                self._parse_start(date_item, meeting_year, meeting_time),
-                self._parse_title(date_item),
-                self._parse_document_link(date_item, response),
-            )
-            for date_item in dates_list.css("li")
-        ]
+        starts = self._parse_starts(dates_list, meeting_year, meeting_time, response)
 
         board_reports_by_month = (
             self._parse_board_reports(response)
@@ -199,6 +191,7 @@ class IndIndygoBodSpiderMixin(
             yield scrapy.Request(
                 self.video_archive_url,
                 callback=self._parse_video_archive_and_continue,
+                errback=self._continue_without_video_archive,
                 # The live page and any same-design historical snapshot both
                 # fetch this same URL - without this, Scrapy's dupe filter
                 # silently drops every request after the first, dropping
@@ -211,6 +204,7 @@ class IndIndygoBodSpiderMixin(
                     "listings_href": listings_href,
                     "meeting_year": meeting_year,
                     "meeting_time": meeting_time,
+                    "venue": venue,
                 },
             )
         else:
@@ -221,86 +215,77 @@ class IndIndygoBodSpiderMixin(
                 meeting_year,
                 meeting_time,
                 board_reports_by_month,
+                venue=venue,
             )
 
-    def _parse_historical_snapshot(self, response, container_selector=None):
-        """Default historical-snapshot handler, for a same-design page."""
-        yield from self._parse_schedule_page(
-            response, container_selector or self.schedule_container_selector
-        )
+    def _parse_starts(self, dates_list, meeting_year, meeting_time, response):
+        """
+        Build `(start, title, document_href)` tuples for a schedule list,
+        skipping (and logging) any item that won't parse, so one editor
+        typo doesn't cost the whole section.
+        """
+        starts = []
+
+        for date_item in dates_list.css("li"):
+            try:
+                start = self._parse_start(date_item, meeting_year, meeting_time)
+            except (ValueError, OverflowError) as exc:
+                self.logger.warning(
+                    "Skipping unparseable schedule item on %s: %s", response.url, exc
+                )
+                continue
+
+            starts.append(
+                (
+                    start,
+                    self._parse_title(date_item),
+                    self._parse_document_link(date_item, response),
+                )
+            )
+
+        return starts
 
     def _strip_wayback(self, url):
         """Unwrap a snapshot's `web.archive.org/web/<ts>/<url>` links to the live URL."""  # noqa
         return self._WAYBACK_PREFIX_RE.sub("", url)
 
-    def _parse_old_design_section(self, response):
-        """
-        Find this spider's section on an old (pre-Oct-2025) page design,
-        where each section is its own `<div class="content-section">`
-        instead of h2/p/ul siblings (see `_parse_section`).
-        """
-        for section in response.css("div.content-section"):
-            heading = section.css("h2::text").get()
-            if not heading or self.section_heading_match not in heading:
-                continue
-
-            meeting_year = self._parse_meeting_year(heading)
-
-            raw_meeting_time = None
-            listings_href = None
-            for paragraph in section.css("p"):
-                strong_text = paragraph.css("strong::text").get()
-                if strong_text and "meeting time" in strong_text.lower():
-                    raw_meeting_time = strong_text
-                    continue
-
-                link_text = paragraph.css("a::text").get()
-                if link_text and "click here" in link_text.lower():
-                    href = paragraph.css("a::attr(href)").get()
-                    if href:
-                        listings_href = self._strip_wayback(response.urljoin(href))
-
-            return meeting_year, raw_meeting_time, section.css("ul"), listings_href
-
-        return None, None, None, None
-
     def _parse_old_design_schedule_snapshot(self, response, reports_url=None):
         """
-        Parse an old-design snapshot's schedule section. Board Reports come
-        from this same response, unless `reports_url` points to a later
+        Parse an old-design (pre-Oct-2025) snapshot's schedule section.
+        The section itself is found the same way as on the current design
+        (see `_parse_section`); only Board Reports differ. They come from
+        this same response, unless `reports_url` points to a later
         snapshot with a more complete Reports accordion.
         """
-        self.location, self.time_notes = self._parse_location_and_time_notes(response)
+        venue = self._parse_location_and_time_notes(response)
 
+        heading = self._find_section_heading(response)
         meeting_year, raw_meeting_time, dates_list, listings_href = (
-            self._parse_old_design_section(response)
+            self._parse_section(heading, response)
+            if heading is not None
+            else (None, None, None, None)
         )
 
-        if meeting_year is None or not raw_meeting_time or not dates_list:
+        if meeting_year is None or not raw_meeting_time or dates_list is None:
             self.logger.warning("Could not parse historical snapshot %s", response.url)
             return
 
         meeting_time = self._parse_meeting_time(raw_meeting_time)
 
-        starts = [
-            (
-                self._parse_start(date_item, meeting_year, meeting_time),
-                self._parse_title(date_item),
-                self._parse_document_link(date_item, response),
-            )
-            for date_item in dates_list.css("li")
-        ]
+        starts = self._parse_starts(dates_list, meeting_year, meeting_time, response)
 
         if reports_url:
             yield scrapy.Request(
                 reports_url,
                 callback=self._parse_old_design_reports_and_continue,
+                errback=self._continue_without_old_design_reports,
                 cb_kwargs={
                     "starts": starts,
                     "source": response.url,
                     "listings_href": listings_href,
                     "meeting_year": meeting_year,
                     "meeting_time": meeting_time,
+                    "venue": venue,
                 },
             )
         else:
@@ -314,10 +299,18 @@ class IndIndygoBodSpiderMixin(
                 meeting_year,
                 meeting_time,
                 board_reports_by_month,
+                venue=venue,
             )
 
     def _parse_old_design_reports_and_continue(
-        self, response, starts, source, listings_href, meeting_year, meeting_time
+        self,
+        response,
+        starts,
+        source,
+        listings_href,
+        meeting_year,
+        meeting_time,
+        venue=None,
     ):
         board_reports_by_month = self._parse_old_design_board_reports(
             response, meeting_year
@@ -329,7 +322,46 @@ class IndIndygoBodSpiderMixin(
             meeting_year,
             meeting_time,
             board_reports_by_month,
+            venue=venue,
         )
+
+    # -- Errbacks -------------------------------------------------------
+    #
+    # Meetings are only yielded at the end of the request chain, so a failed
+    # enrichment request (video archive, OnBoard, a later snapshot) must not
+    # take the already-parsed schedule down with it. Each errback carries on
+    # with the same cb_kwargs, minus whatever the failed request would have
+    # added.
+
+    def _continue_without_video_archive(self, failure):
+        self.logger.warning(
+            "Video archive request failed (%s); continuing without video links",
+            failure.request.url,
+        )
+        yield from self._continue_parsing(**failure.request.cb_kwargs)
+
+    def _continue_without_listings(self, failure):
+        self.logger.warning(
+            "Meeting listings request failed (%s); continuing without listings",
+            failure.request.url,
+        )
+        yield from self._continue_parsing(
+            **{**failure.request.cb_kwargs, "listings_href": None}
+        )
+
+    def _skip_extra_listing_year(self, failure):
+        self.logger.warning(
+            "Extra listing year request failed (%s); skipping that year",
+            failure.request.url,
+        )
+        yield from self._fetch_extra_listing_years(**failure.request.cb_kwargs)
+
+    def _continue_without_old_design_reports(self, failure):
+        self.logger.warning(
+            "Board Reports snapshot request failed (%s); continuing without them",
+            failure.request.url,
+        )
+        yield from self._continue_parsing(**failure.request.cb_kwargs)
 
     def _parse_old_design_board_reports(self, response, year):
         """Board Reports accordion on an old-design board page snapshot."""
@@ -400,6 +432,7 @@ class IndIndygoBodSpiderMixin(
         listings_href,
         meeting_year,
         meeting_time,
+        venue=None,
     ):
         video_link_by_month = self._parse_video_archive(response)
         yield from self._continue_parsing(
@@ -410,6 +443,7 @@ class IndIndygoBodSpiderMixin(
             meeting_time,
             board_reports_by_month,
             video_link_by_month,
+            venue=venue,
         )
 
     def _continue_parsing(
@@ -421,11 +455,13 @@ class IndIndygoBodSpiderMixin(
         meeting_time,
         board_reports_by_month=None,
         video_link_by_month=None,
+        venue=None,
     ):
         if listings_href:
             yield scrapy.Request(
                 listings_href,
                 callback=self._parse_meeting_listings_and_build,
+                errback=self._continue_without_listings,
                 cb_kwargs={
                     "starts": starts,
                     "source": source,
@@ -434,6 +470,7 @@ class IndIndygoBodSpiderMixin(
                     "meeting_time": meeting_time,
                     "board_reports_by_month": board_reports_by_month,
                     "video_link_by_month": video_link_by_month,
+                    "venue": venue,
                 },
             )
         else:
@@ -444,9 +481,14 @@ class IndIndygoBodSpiderMixin(
                     board_reports_by_month=board_reports_by_month,
                     video_link_by_month=video_link_by_month,
                 )
-                yield self._build_meeting(start, title, links, source)
+                yield self._build_meeting(start, title, links, source, venue)
 
-    def _build_meeting(self, start, title, links, source):
+    def _build_meeting(self, start, title, links, source, venue=None):
+        location, time_notes = venue or (
+            {"name": "", "address": ""},
+            self._FALLBACK_TIME_NOTES,
+        )
+
         meeting = Meeting(
             title=title,
             description="",
@@ -454,8 +496,8 @@ class IndIndygoBodSpiderMixin(
             start=start,
             end=None,
             all_day=False,
-            time_notes=self.time_notes,
-            location=self.location,
+            time_notes=time_notes,
+            location=location,
             links=links,
             source=source,
         )
@@ -475,6 +517,7 @@ class IndIndygoBodSpiderMixin(
         meeting_time,
         board_reports_by_month=None,
         video_link_by_month=None,
+        venue=None,
     ):
         """Match current-year meetings to the OnBoard listing, then fetch extra years."""  # noqa
         meeting_link_by_date, _past_dates_by_year = self._parse_meeting_listings(
@@ -492,6 +535,7 @@ class IndIndygoBodSpiderMixin(
             extra_dates_by_year={},
             board_reports_by_month=board_reports_by_month,
             video_link_by_month=video_link_by_month,
+            venue=venue,
         )
 
     def _fetch_extra_listing_years(
@@ -506,6 +550,7 @@ class IndIndygoBodSpiderMixin(
         extra_dates_by_year,
         board_reports_by_month=None,
         video_link_by_month=None,
+        venue=None,
     ):
         if not remaining_offsets:
             all_starts = starts + self._parse_past_starts(
@@ -520,7 +565,7 @@ class IndIndygoBodSpiderMixin(
                     board_reports_by_month=board_reports_by_month,
                     video_link_by_month=video_link_by_month,
                 )
-                yield self._build_meeting(start, title, links, source)
+                yield self._build_meeting(start, title, links, source, venue)
             return
 
         offset, remaining_offsets = remaining_offsets[0], remaining_offsets[1:]
@@ -530,6 +575,7 @@ class IndIndygoBodSpiderMixin(
         yield scrapy.Request(
             year_url,
             callback=self._parse_extra_listing_year_and_continue,
+            errback=self._skip_extra_listing_year,
             cb_kwargs={
                 "remaining_offsets": remaining_offsets,
                 "starts": starts,
@@ -541,6 +587,7 @@ class IndIndygoBodSpiderMixin(
                 "extra_dates_by_year": extra_dates_by_year,
                 "board_reports_by_month": board_reports_by_month,
                 "video_link_by_month": video_link_by_month,
+                "venue": venue,
             },
         )
 
@@ -557,6 +604,7 @@ class IndIndygoBodSpiderMixin(
         extra_dates_by_year,
         board_reports_by_month=None,
         video_link_by_month=None,
+        venue=None,
     ):
         new_link_by_date, new_dates_by_year = self._parse_meeting_listings(
             response, meeting_year
@@ -566,7 +614,7 @@ class IndIndygoBodSpiderMixin(
 
         extra_dates_by_year = dict(extra_dates_by_year)
         for year, dates in new_dates_by_year.items():
-            # First offset to find a year wins -- guards against OnBoard's
+            # First offset to find a year wins - guards against OnBoard's
             # fallback view re-reporting a year we already have.
             extra_dates_by_year.setdefault(year, dates)
 
@@ -581,6 +629,7 @@ class IndIndygoBodSpiderMixin(
             extra_dates_by_year=extra_dates_by_year,
             board_reports_by_month=board_reports_by_month,
             video_link_by_month=video_link_by_month,
+            venue=venue,
         )
 
     def _resolve_links(
@@ -608,14 +657,19 @@ class IndIndygoBodSpiderMixin(
 
         if video_link_by_month:
             month_key = (str(start.year), start.strftime("%B"))
-            href = video_link_by_month.pop(month_key, None)
-            if href:
-                links.append({"href": href, "title": "Video"})
+            self._append_link(links, video_link_by_month, month_key, "Video")
 
         return links
 
     def _append_link(self, links, mapping, key, title):
-        """Add a link and consume it, so it's attached to only one meeting."""
+        """
+        Add a link and consume it, so it's attached to only one meeting.
+
+        This matters for the month-keyed maps (Board Reports, Video): when a
+        month has two meetings - e.g. the July budget introduction and the
+        late-July public hearing - only the first in `starts` order gets
+        that month's report/video. Date-keyed listing links are unique anyway.
+        """
         href = (mapping or {}).pop(key, None)
         if href:
             links.append({"href": href, "title": title})
@@ -773,40 +827,59 @@ class IndIndygoBodSpiderMixin(
 
         return sorted(past_starts, key=lambda item: item[0])
 
-    def _parse_section(self, container):
-        in_section = False
-        meeting_year = None
+    def _normalize_heading(self, text):
+        text = self._HEADING_NORMALIZE_RE.sub(" ", text.lower())
+        return re.sub(r"\s+", " ", text).strip()
+
+    def _find_section_heading(self, response):
+        """
+        Find this spider's `h2` by its text rather than by a layout class,
+        which is what a redesign is most likely to rename.
+        """
+        target = self._normalize_heading(self.section_heading_match)
+
+        for heading in response.xpath("//h2"):
+            heading_text = " ".join(heading.css("::text").getall())
+            if target in self._normalize_heading(heading_text):
+                return heading
+
+        return None
+
+    def _parse_section(self, heading, response):
+        """
+        Read the section under `heading`: its following siblings up to the
+        next h2/h3. Works on both page designs - on the old one each h2
+        sits in its own `div.content-section`, so its siblings are exactly
+        that section's contents.
+        """
+        heading_text = " ".join(heading.css("::text").getall()).strip()
+        try:
+            meeting_year = self._parse_meeting_year(heading_text)
+        except ValueError as exc:
+            self.logger.warning("%s", exc)
+            return None, None, None, None
+
         raw_meeting_time = None
         dates_list = None
         listings_href = None
 
-        for child in container.xpath("./*"):
+        for child in heading.xpath("following-sibling::*"):
             tag = child.root.tag
 
-            if tag == "h2":
-                if in_section:
-                    break
-
-                heading_text = "".join(child.css("::text").getall()).strip()
-                if self.section_heading_match in heading_text:
-                    in_section = True
-                    meeting_year = self._parse_meeting_year(heading_text)
-                continue
-
-            if not in_section:
-                continue
+            if tag in ("h2", "h3"):
+                break
 
             if tag == "p":
                 strong_text = child.css("strong::text").get()
+                link_text = child.css("a::text").get() or ""
                 if strong_text and "meeting time" in strong_text.lower():
                     raw_meeting_time = strong_text
-                else:
-                    link_text = child.css("a::text").get()
-                    if link_text and "click here" in link_text.lower():
-                        href = child.css("a::attr(href)").get()
-                        if href:
-                            listings_href = href
-            elif tag == "ul":
+                elif "click here" in link_text.lower():
+                    href = child.css("a::attr(href)").get()
+                    if href:
+                        listings_href = self._strip_wayback(response.urljoin(href))
+            elif tag == "ul" and dates_list is None:
+                # First list only, so a following block can't bleed in.
                 dates_list = child
 
         return meeting_year, raw_meeting_time, dates_list, listings_href
@@ -817,7 +890,7 @@ class IndIndygoBodSpiderMixin(
 
         if not year_match:
             raise ValueError(
-                f"Could not find meeting year in section title: " f"{section_title!r}"
+                f"Could not find meeting year in section title: {section_title!r}"
             )
 
         return year_match.group()
