@@ -1,3 +1,5 @@
+from city_scrapers_core.constants import COMMITTEE
+
 from city_scrapers.mixins.ind_indygo_bod import IndIndygoBodSpiderMixin
 
 spider_configs = [
@@ -23,6 +25,7 @@ spider_configs = [
         "agency": "Indianapolis Indygo Finance Committee",
         "agency_name": "IndyGo Board of Directors",
         "title": "IndyGo Finance Committee",
+        "classification": COMMITTEE,
         "section_heading_match": "Finance Committee Meetings",
         "video_archive_pattern": r"^Finance Committee\b",
     },
@@ -32,6 +35,7 @@ spider_configs = [
         "agency": "Indianapolis Indygo Governance Audit Committee",
         "agency_name": "IndyGo Board of Directors",
         "title": "IndyGo Governance and Audit Committee",
+        "classification": COMMITTEE,
         "section_heading_match": "Governance and Audit Committee",
         "video_archive_pattern": r"^Governance\s*(?:and|&)\s*Audit",
     },
@@ -41,6 +45,7 @@ spider_configs = [
         "agency": "Indianapolis Indygo Service Committee",
         "agency_name": "IndyGo Board of Directors",
         "title": "IndyGo Service Committee",
+        "classification": COMMITTEE,
         "section_heading_match": "Service Committee Meetings",
         "video_archive_pattern": r"^Service Committee\b",
     },
