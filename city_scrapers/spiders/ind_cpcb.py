@@ -34,9 +34,7 @@ class IndCpcbSpider(CityScrapersSpider):
     """
     date_re = re.compile(r"([A-Z][a-z]+ \d{1,2}), \d{4}")
     time_re = re.compile(r"(\d{1,2}):(\d{2})\s*([ap])\.?m\.?", re.IGNORECASE)
-    time_note_suffix = (
-        "Please check the meeting notice attachment for start time details."
-    )
+    time_note_suffix = "Please check the meeting notice attachment for meeting location and start time details."  # noqa
 
     def start_requests(self):
         yield scrapy.Request(
@@ -56,7 +54,6 @@ class IndCpcbSpider(CityScrapersSpider):
         """Yield a Meeting for every date listed in a "Board Materials" accordion."""
         activity = response.json()["data"]["activity"]
         title = self._parse_title(activity)
-        location = self._parse_location(activity)
         time_notes = self._parse_time_notes(activity)
         meeting_time = self._parse_meeting_time(activity)
 
@@ -94,7 +91,7 @@ class IndCpcbSpider(CityScrapersSpider):
                     end=None,
                     all_day=False,
                     time_notes=time_notes,
-                    location=location,
+                    location={"name": "TBD", "address": ""},
                     links=self._parse_links(docs),
                     source=self.source_url,
                 )
@@ -138,22 +135,6 @@ class IndCpcbSpider(CityScrapersSpider):
             )
             return time(0, 0)
         return match.group(0)
-
-    def _parse_location(self, activity):
-        """The activity has no location of its own; use the parent agency's."""
-        loc = activity["location"] or activity["agencies"][0]["location"]
-        street = ", ".join(
-            p.strip() for p in (loc["address2"], loc["address3"]) if p and p.strip()
-        )
-        region = " ".join(
-            p.strip() for p in (loc["state"], loc["zip"]) if p and p.strip()
-        )
-        return {
-            "name": (loc["address1"] or "").strip(),
-            "address": ", ".join(
-                p for p in (street, (loc["city"] or "").strip(), region) if p
-            ),
-        }
 
     def _parse_links(self, docs):
         """Document links under one date. Nested <a>s repeat a link with

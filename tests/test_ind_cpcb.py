@@ -69,14 +69,14 @@ def test_time_notes(first_meeting):
     assert first_meeting["time_notes"] == (
         "The board generally meets on the second Monday of each month at "
         "6:00 p.m., but no less than quarterly, to conduct business. "
-        "Please check the meeting notice attachment for start time details."
+        "Please check the meeting notice attachment for meeting location and start time details."  # noqa
     )
 
 
 def test_location(first_meeting):
     assert first_meeting["location"] == {
-        "name": "City-County Building",
-        "address": "200 E. Washington St., Suite 1860, Indianapolis, IN 46204",
+        "name": "TBD",
+        "address": "",
     }
 
 
