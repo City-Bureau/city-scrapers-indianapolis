@@ -34,6 +34,14 @@ def archive_response():
 
 
 @pytest.fixture
+def misc_event_response():
+    return file_response(
+        join(dirname(__file__), "files", "ind_housing_boc_misc_event.html"),
+        url="https://www.indyhousing.org/calendar/landlord-workshop",
+    )
+
+
+@pytest.fixture
 def upcoming_items(spider, upcoming_response):
     with freeze_time("2026-08-31"):
         return [item for item in spider.parse(upcoming_response)]
@@ -177,3 +185,15 @@ def test_archive_classification(archive_items):
 
 def test_archive_all_day(archive_items):
     assert archive_items[0]["all_day"] is False
+
+
+# --- category filter tests --------------------------------------------------
+
+
+def test_misc_event_category(spider, misc_event_response):
+    assert spider._parse_category(misc_event_response) == "Agency"
+
+
+def test_misc_event_skipped(spider, misc_event_response):
+    items = [item for item in spider.parse(misc_event_response)]
+    assert items == []

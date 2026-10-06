@@ -19,6 +19,7 @@ class IndHousingBocSpider(CityScrapersSpider):
     ]
 
     LOCATION_NAME = "Indianapolis Housing Agency"
+    CATEGORY_NAME = "Board of Commissioners"
 
     # Matches e.g. "February 17, 2026, at 1:00 PM" (ignores leading weekday)
     ARCHIVE_DATETIME_RE = re.compile(
@@ -47,7 +48,7 @@ class IndHousingBocSpider(CityScrapersSpider):
         )
         self.crawler.engine.crawl(
             scrapy.Request(
-                "https://www.indyhousing.org/calendar",
+                "https://www.indyhousing.org/calendar/filtersOnAll/Y2F0ZWdvcnl+M2YwNzZmNTA2MjQ2MTFmMDk5OTk4M2RiNzRkNWU5ZWQ=/",  # noqa
                 callback=self.parse_start,
             ),
         )
@@ -119,12 +120,39 @@ class IndHousingBocSpider(CityScrapersSpider):
                 response.url,
             )
 
+    def _parse_category(self, response):
+        """
+        Return the event's category from the 'Category:' widget, which
+        appears on both the calendar and news-archive detail templates.
+        Returns None if the widget is missing.
+        """
+        text = " ".join(response.css(".css_hook_linked_menu ::text").getall())
+        if "Category:" not in text:
+            return None
+        return " ".join(text.split("Category:", 1)[1].split())
+
     def parse(self, response):
         """
         Build a Meeting item from an individual meeting detail page. Detects
         and handles both the upcoming-meeting template (/calendar/...) and
         the past-meeting template (/news-archives/...).
         """
+        category = self._parse_category(response)
+        if category is None:
+            self.logger.warning(
+                "No category found on detail page %s — site markup may have "
+                "changed; parsing it anyway.",
+                response.url,
+            )
+        elif self.CATEGORY_NAME.lower() not in category.lower():
+            self.logger.info(
+                "Skipping %s because its category is %r, not %r.",
+                response.url,
+                category,
+                self.CATEGORY_NAME,
+            )
+            return
+
         date_hook_text = " ".join(
             response.css(".css_hook_date").css("*::text").getall()
         )
