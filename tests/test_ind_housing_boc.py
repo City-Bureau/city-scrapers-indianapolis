@@ -6,6 +6,7 @@ from city_scrapers_core.constants import BOARD, CANCELLED
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.utils import file_response
 from freezegun import freeze_time
+from scrapy.http import HtmlResponse
 
 from city_scrapers.spiders.ind_housing_boc import IndHousingBocSpider
 
@@ -177,3 +178,84 @@ def test_archive_classification(archive_items):
 
 def test_archive_all_day(archive_items):
     assert archive_items[0]["all_day"] is False
+
+
+# --- non-board event (Landlord Workshop) tests -------------------------------
+
+
+def _workshop_response(longtext=None, location_widget=None):
+    """Load the saved Landlord Workshop page, optionally injecting location
+    markup (the live page has an empty Location widget and the venue only
+    appears inside the flyer image)."""
+    with open(join(dirname(__file__), "files", "ind_housing_boc_workshop.html")) as f:
+        body = f.read()
+    if longtext:
+        body = body.replace(
+            "</p></div>\n<!-- Location Widget -->",
+            f"</p><p>{longtext}</p></div>\n<!-- Location Widget -->",
+            1,
+        )
+    if location_widget:
+        body = body.replace("||||||-->", f"||||||-->\n{location_widget}", 1)
+    return HtmlResponse(
+        url="https://www.indyhousing.org/calendar/landlord-workshop",
+        body=body,
+        encoding="utf-8",
+    )
+
+
+def _parse_one(spider, response):
+    with freeze_time("2026-09-01"):
+        return list(spider.parse(response))[0]
+
+
+def test_workshop_fixture_basics(spider):
+    item = _parse_one(spider, _workshop_response())
+    assert item["title"] == "Landlord Workshop"
+    assert item["start"] == datetime(2026, 9, 22, 13, 0)
+    # The live page's Location widget is empty (venue is only in the flyer image)
+    assert item["location"] == {"name": "Indianapolis Housing Agency", "address": ""}
+
+
+def test_address_without_comma_before_city(spider):
+    response = _workshop_response(
+        longtext="Location | 1919 N. Meridian Street Indianapolis, IN 46202"
+    )
+    item = _parse_one(spider, response)
+    assert item["location"] == {
+        "name": "Indianapolis Housing Agency",
+        "address": "1919 N. Meridian Street Indianapolis, IN 46202",
+    }
+
+
+def test_address_from_location_widget_preferred(spider):
+    response = _workshop_response(
+        longtext="Location | Somewhere else",
+        location_widget=(
+            "<div class='col-lg-12 css_hook_location'><strong>Address</strong>: "
+            "1919 N. Meridian Street Indianapolis, IN 46202</div>"
+        ),
+    )
+    item = _parse_one(spider, response)
+    assert item["location"]["address"] == (
+        "1919 N. Meridian Street Indianapolis, IN 46202"
+    )
+
+
+def test_address_regex_tolerates_missing_comma(spider):
+    text = "Join us at 1919 N. Meridian Street Indianapolis, IN 46202 for lunch"
+    assert spider.ADDRESS_RE.search(text).group(0).startswith("1919 N. Meridian")
+
+
+def test_other_venue_not_labeled_as_agency(spider):
+    response = _workshop_response(
+        location_widget=(
+            "<div class='col-lg-12 css_hook_location'><strong>Address</strong>: "
+            "200 E. Washington Street, Indianapolis, IN 46204</div>"
+        ),
+    )
+    item = _parse_one(spider, response)
+    assert item["location"] == {
+        "name": "",
+        "address": "200 E. Washington Street, Indianapolis, IN 46204",
+    }

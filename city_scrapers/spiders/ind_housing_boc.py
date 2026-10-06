@@ -25,7 +25,7 @@ class IndHousingBocSpider(CityScrapersSpider):
         r"([A-Z][a-z]+ \d{1,2},\s*\d{4}),?\s*at\s*([\d:]+\s*[APMapm\.]{2,4})"
     )
     ADDRESS_RE = re.compile(
-        r"\d{1,5}(?!\s*[APap][Mm]\b)\s+[A-Za-z0-9.,#\s]+?,\s*[A-Za-z\s]+,\s*[A-Z]{2}\s*\d{5}(?:-\d{4})?"  # noqa
+        r"\d{1,5}(?!\s*[APap][Mm]\b)\s+[A-Za-z0-9.,#\s]+?,?\s*[A-Za-z\s]+,\s*[A-Z]{2}\s*\d{5}(?:-\d{4})?"  # noqa
     )
     # Matches the archive pagination URL suffix (e.g. "/=desc/1")
     ARCHIVE_PAGE_RE = re.compile(r"/=desc/(\d+)$")
@@ -181,7 +181,14 @@ class IndHousingBocSpider(CityScrapersSpider):
         return "no board meeting" in (raw_title or "").lower()
 
     def _parse_location(self, address):
-        """Build the location dict shared by both templates."""
+        """Build the location dict shared by both templates.
+
+        The site never gives a separate venue name, so the agency name is used
+        when the address is blank or at the agency's own N. Meridian Street
+        offices; any other address gets no name rather than a wrong one.
+        """
+        if address and not re.search(r"\bN\.?\s*Meridian\b", address, re.I):
+            return {"name": "", "address": address}
         return {"name": self.LOCATION_NAME, "address": address}
 
     def _parse_meeting_fields(self, title, start, location, no_meeting, raw_title):
@@ -231,17 +238,37 @@ class IndHousingBocSpider(CityScrapersSpider):
             except ValueError:
                 start = None
 
-        address = ""
-        if not no_meeting:
-            location_text = " ".join(
-                response.css(".css_hook_longtext p::text").getall()
-            )
-            if "|" in location_text:
-                address = location_text.split("|", 1)[1].strip()
+        address = "" if no_meeting else self._parse_upcoming_address(response)
 
         return self._parse_meeting_fields(
             title, start, self._parse_location(address), no_meeting, raw_title
         )
+
+    def _parse_upcoming_address(self, response):
+        """Find the address on an upcoming-meeting page.
+
+        Prefers the structured Location widget (".css_hook_location", rendered
+        as "Address: <address>"). Falls back to the "Location | <address>"
+        long-text paragraph, then to any address-like text in the long text.
+        Some events (e.g. workshops whose details are only in a flyer image)
+        leave all of these empty, in which case the address is "".
+        """
+        widget_text = " ".join(
+            response.css(".css_hook_location").css("*::text").getall()
+        )
+        widget_text = re.sub(r"^\s*Address\s*:", "", widget_text.strip()).strip()
+        if widget_text:
+            return re.sub(r"\s+", " ", widget_text)
+
+        longtext = " ".join(
+            response.css(".css_hook_longtext p").css("*::text").getall()
+        )
+        if "|" in longtext:
+            candidate = re.sub(r"\s+", " ", longtext.split("|", 1)[1]).strip()
+            if candidate:
+                return candidate
+        addr_match = self.ADDRESS_RE.search(longtext)
+        return re.sub(r"\s+", " ", addr_match.group(0)).strip() if addr_match else ""
 
     def _parse_archive_detail(self, response):
         """Parse the past-meeting (news-archive) detail page template."""
