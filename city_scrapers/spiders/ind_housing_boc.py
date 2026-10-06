@@ -64,6 +64,14 @@ class IndHousingBocSpider(CityScrapersSpider):
         past-meetings archive listing. Each meeting link is followed to its
         detail page.
         """
+        if response.status in (301, 302):
+            # Past the last archive page; the site redirects back to page 1.
+            self.logger.info(
+                "Archive listing page %s redirected to page 1 — "
+                "assuming we've passed the last page.",
+                response.url,
+            )
+            return
         if response.css("#listItems"):
             yield from self._parse_upcoming_list(response)
         elif response.css("#listWithImages"):
@@ -112,7 +120,13 @@ class IndHousingBocSpider(CityScrapersSpider):
             next_url = self.ARCHIVE_PAGE_RE.sub(
                 f"/=desc/{current_page + 1}", response.url
             )
-            yield response.follow(next_url, callback=self.parse_start)
+            # The site redirects out-of-range page numbers back to page 1,
+            # so a redirect here means we've passed the last page.
+            yield response.follow(
+                next_url,
+                callback=self.parse_start,
+                meta={"dont_redirect": True, "handle_httpstatus_list": [301, 302]},
+            )
         else:
             self.logger.warning(
                 "Could not find a page number in archive URL %s — unable "
