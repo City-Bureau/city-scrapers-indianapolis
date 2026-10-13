@@ -156,8 +156,9 @@ def test_end(parsed_items):
     assert parsed_items[0]["end"] is None
 
 
-def test_time_notes(parsed_items):
-    assert parsed_items[0]["time_notes"] == ""
+def test_time_notes(spider, parsed_items):
+    assert all(item["time_notes"] == spider.TIME_NOTES for item in parsed_items)
+    assert spider.TIME_NOTES.startswith("Meeting details may change.")
 
 
 def test_id(parsed_items):
