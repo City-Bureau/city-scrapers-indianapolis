@@ -43,6 +43,14 @@ class IndCityCountySpider(CityScrapersSpider):
         "https://calendar.indy.gov/handlers/query.ashx?get=eventlist&view=list.xslt"
     )
     PAGE_SIZE = 125
+    # Meeting status on calendar.indy.gov is unreliable (cancellations are
+    # often only posted in the meeting notice), so every meeting carries a
+    # standing reminder. Requested by City Bureau (Airtable ticket #116).
+    TIME_NOTES = (
+        "Meeting details may change. Always check the source page and the "
+        "official meeting notice, if listed, to confirm this meeting is still "
+        "taking place."
+    )
 
     GRAPHQL_URL = "https://api-us-east-1-indy.graphcms.com/v2/ckp3xrh1i657g01xp53az2mv4/master"  # noqa: E501
     GRAPHQL_QUERY = """
@@ -396,7 +404,7 @@ class IndCityCountySpider(CityScrapersSpider):
             start=start,
             end=end,
             all_day=all_day,
-            time_notes="",
+            time_notes=self.TIME_NOTES,
             location=self._parse_location(item),
             links=links,
             source=self._parse_source(item),
