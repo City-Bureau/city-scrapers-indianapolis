@@ -4,12 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-scrapy = "*"
+scrapy = "==2.11.2"
+w3lib = "<2.5"
+twisted = "<26"
 city-scrapers-core = {ref = "main", git = "https://github.com/City-Bureau/city-scrapers-core.git", extras = ["azure"]}
 scrapy-wayback-middleware = "*"
 python-dateutil = "*"
 scrapy-sentry-errors = "1.0.0"
 pytz = "*"
+pypdf = "*"
 
 [dev-packages]
 freezegun = "*"
