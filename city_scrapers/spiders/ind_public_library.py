@@ -27,6 +27,7 @@ class IndPublicLibrarySpider(CityScrapersSpider):
     DATE_RE = re.compile(r"[A-Z][a-z]+ \d{1,2},? \d{4}")
     MONTH_DAY_RE = re.compile(r"[A-Z][a-z]+ \d{1,2}")
     YEAR_RE = re.compile(r"\d{4}")
+    TIME_RE = re.compile(r"\d{1,2}(?::\d{2})?\s*[APap]\.?[Mm]\.?")
     LOCATION_OVERRIDE_RE = re.compile(
         r"to be held at (?:the )?([^,]+),\s*([^-]+?)(?:-|$)", re.I
     )
@@ -65,10 +66,28 @@ class IndPublicLibrarySpider(CityScrapersSpider):
         cleaned = self.ATTACHMENT_DATE_RE.sub("", text, count=1)
         return cleaned.strip(" -,")
 
-    def _at_default_time(self, date_obj):
-        """Combine a parsed date with the meeting's fixed 6:30pm start
-        time. No page ever gives an actual time, so every meeting is
-        set to this same default."""
+    def _at_default_time(self, date_obj, text=""):
+        """Combine a parsed date with the meeting's start time.
+
+        First checks if the text states an explicit time (e.g. 'August 11
+        at 10 a.m. Special Board Meeting'). If so, uses that. Otherwise
+        falls back to the fixed 6:30pm default, since most pages never
+        give an actual time."""
+        match = self.TIME_RE.search(text) if text else None
+        if match:
+            time_str = match.group(0)
+            try:
+                explicit_time = parse(time_str).time()
+                return date_obj.replace(
+                    hour=explicit_time.hour, minute=explicit_time.minute
+                )
+            except (ValueError, OverflowError):
+                self.logger.warning(
+                    "Found what looked like a time ('%s') but couldn't "
+                    "parse it — falling back to the default time.",
+                    time_str,
+                )
+
         return date_obj.replace(
             hour=self.DEFAULT_TIME.hour, minute=self.DEFAULT_TIME.minute
         )
@@ -80,7 +99,7 @@ class IndPublicLibrarySpider(CityScrapersSpider):
             title=self._parse_title(text),
             description="",
             classification=BOARD,
-            start=self._at_default_time(date_obj),
+            start=self._at_default_time(date_obj, text),
             end=None,
             all_day=False,
             time_notes=self.TIME_NOTES,
